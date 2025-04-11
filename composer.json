@@ -1,0 +1,27 @@
+{
+    "name": "wecraft/loyalty-program",
+    "description": "wecraft/loyalty-program",
+    "type": "shopware-platform-plugin",
+    "version": "1.0.0",
+    "license": "MIT",
+    "require": {
+        "shopware/core": "~6.6.0"
+    },
+    "extra": {
+        "shopware-plugin-class": "LoyaltyProgram\\LoyaltyProgram",
+        "label": {
+            "de-DE": "Treue Programm",
+            "en-GB": "Loyalty program"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "LoyaltyProgram\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "LoyaltyProgram\\Tests\\": "tests/"
+        }
+    }
+}

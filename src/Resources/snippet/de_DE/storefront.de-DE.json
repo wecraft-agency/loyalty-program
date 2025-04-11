@@ -1,0 +1,8 @@
+{
+  "loyaltyProgram": {
+    "global": {
+      "points": "Punkte",
+      "pointsTotal": "Punkte bei Bestellung"
+    }
+  }
+}

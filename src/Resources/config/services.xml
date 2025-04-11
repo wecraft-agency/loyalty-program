@@ -1,0 +1,36 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="LoyaltyProgram\Subscriber\CartBeforeSerializationSubscriber">
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="LoyaltyProgram\Subscriber\CheckoutOrderPlacedSubscriber">
+            <argument type="service" id="request_stack" />
+            <argument type="service" id="order.repository" />
+            <argument type="service" id="customer.repository" />
+
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="LoyaltyProgram\Service\Order\ListenToOrderChanges">
+            <argument type="service" id="request_stack" />
+            <argument type="service" id="order.repository" />
+            <argument type="service" id="customer.repository" />
+
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="LoyaltyProgram\Core\Checkout\Cart\PointsCartProcessor">
+            <argument type="service" id="Shopware\Core\Checkout\Cart\Price\QuantityPriceCalculator"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+
+            <!-- after product collector/processor -->
+            <tag name="shopware.cart.processor" priority="4500" />
+        </service>
+    </services>
+</container>

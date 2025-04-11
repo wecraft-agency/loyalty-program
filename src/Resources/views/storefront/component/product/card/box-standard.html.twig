@@ -1,0 +1,12 @@
+{% sw_extends '@Storefront/storefront/component/product/card/box-standard.html.twig' %}
+
+{% block component_product_box_content %}
+    {% block component_product_box_content_loyalty %}
+        {% if product.customFields.loyalty_product_points %}
+            <div style="background: blue; color: white; padding: 1rem;">
+                {{ "loyaltyProgram.global.points"|trans|sw_sanitize }}: <strong>{{ product.customFields.loyalty_product_points }}</strong>
+            </div>
+        {% endif %}
+    {% endblock %}
+    {{ parent() }}
+{% endblock %}

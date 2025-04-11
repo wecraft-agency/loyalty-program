@@ -1,0 +1,21 @@
+{% sw_extends '@Storefront/storefront/page/account/index.html.twig' %}
+
+
+
+{% block page_account_overview %}
+    {% block page_account_overview_loyalty %}
+        <div class="account-overview-loyalty">
+            {% set loyaltyPoints = 0 %}
+
+            {% if context.customer.customFields.loyalty_customer_points %}
+                {% set loyaltyPoints = context.customer.customFields.loyalty_customer_points %}
+            {% endif %}
+
+            <div style="background: blue; color: white; padding: 1rem;">
+                {{ "loyaltyProgram.global.points"|trans|sw_sanitize }}: <strong>{{ loyaltyPoints }}</strong>
+            </div>
+        </div>
+    {% endblock %}
+
+    {{ parent() }}
+{% endblock %}

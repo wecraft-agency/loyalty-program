@@ -1,0 +1,8 @@
+{
+  "loyaltyProgram": {
+    "global": {
+      "points": "Points",
+      "pointsTotal": "Points by order"
+    }
+  }
+}

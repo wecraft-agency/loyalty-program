@@ -1,0 +1,11 @@
+{% sw_extends '@Storefront/storefront/page/checkout/summary.html.twig' %}
+
+{% block page_checkout_summary %}
+    {{ parent() }}
+
+    {% if page.cart.data.elements.loyalty_points_total and page.cart.data.elements.loyalty_points_total > 0 %}
+        <div style="background: blue; color: white; padding: 1rem;">
+            {{ "loyaltyProgram.global.pointsTotal"|trans|sw_sanitize }}: <strong>{{ page.cart.data.elements.loyalty_points_total }}</strong>
+        </div>
+    {% endif %}
+{% endblock %}

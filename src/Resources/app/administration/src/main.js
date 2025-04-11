@@ -1,0 +1,1 @@
+import './module/loyalty-program';

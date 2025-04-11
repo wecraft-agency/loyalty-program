@@ -1,0 +1,13 @@
+{% sw_extends '@Storefront/storefront/component/line-item/type/product.html.twig' %}
+
+{% block component_line_item_type_product_details_container %}
+    {% block component_line_item_type_product_details_container_loyalty %}
+        {% if lineItem.payload.customFields.loyalty_product_points %}
+            <div style="background: blue; color: white; padding: 1rem;">
+                {{ "loyaltyProgram.global.points"|trans|sw_sanitize }}: <strong>{{ lineItem.payload.customFields.loyalty_product_points }}</strong>
+            </div>
+        {% endif %}
+    {% endblock %}
+
+    {{ parent() }}
+{% endblock %}
