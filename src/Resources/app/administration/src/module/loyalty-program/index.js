@@ -25,15 +25,17 @@ Shopware.Module.register('loyalty-program', {
         },
         {
             id: 'loyalty-rewards',
-            label: 'Rewards',
-            position: 10,
             parent: 'loyalty-program',
+            label: 'loyalty-program.general.rewardsLabel',
+            path: 'sw.extension.store',
+            position: 10,
         },
         {
             id: 'loyalty-redemptions',
-            label: 'Redemptions',
-            position: 10,
             parent: 'loyalty-program',
+            label: 'loyalty-program.general.redemptionsLabel',
+            path: 'sw.extension.store',
+            position: 10,
         },
     ],
 })

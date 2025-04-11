@@ -2,7 +2,9 @@
   "loyalty-program": {
     "general": {
       "mainMenuItemGeneral": "Loyalty program",
-      "descriptionTextModule": "Loyalty program"
+      "descriptionTextModule": "Loyalty program",
+      "rewardsLabel": "Rewards",
+      "redemptionsLabel": "Redemptions"
     }
   }
 }

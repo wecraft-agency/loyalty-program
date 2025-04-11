@@ -1,8 +1,10 @@
 {
   "loyalty-program": {
     "general": {
-      "mainMenuItemGeneral": "Loyalty Program",
-      "descriptionTextModule": "Loyalty Program"
+      "mainMenuItemGeneral": "Bonusprogramm",
+      "descriptionTextModule": "Bonusprogramm",
+      "rewardsLabel": "Belohnungen",
+      "redemptionsLabel": "Einlösungen"
     }
   }
 }
