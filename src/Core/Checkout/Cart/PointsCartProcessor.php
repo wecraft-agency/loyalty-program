@@ -18,7 +18,7 @@ class PointsCartProcessor implements CartProcessorInterface
 
         // Do stuff to the `$toCalculate` cart with your new data
         foreach ($toCalculate->getLineItems()->getFlat() as $lineItem) {
-            if ( $lineItem->getPayload()['customFields']['loyalty_product_points'] ) {
+            if ( isset($lineItem->getPayload()['customFields']) && $lineItem->getPayload()['customFields']['loyalty_product_points'] ) {
                 $quantity = $lineItem->getQuantity();
                 $itemPoints = (int)$lineItem->getPayload()['customFields']['loyalty_product_points'];
                 $points = (int)($points + ($quantity * $itemPoints));
