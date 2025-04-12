@@ -4,12 +4,33 @@
         xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/trunk/src/Core/System/SystemConfig/Schema/config.xsd">
 
     <card>
-        <title>Minimal configuration</title>
+        <title>Points calculation</title>
+        <title lang="de-DE">Punkte berechnung</title>
 
-        <input-field type="text">
-            <name>textField</name>
-            <label>Test field with default value</label>
-            <defaultValue>test</defaultValue>
+        <input-field type="single-select">
+            <name>pointsCalculationType</name>
+            <label>Calculate points by</label>
+            <label lang="de-DE">Punkte berechnen aus</label>
+            <options>
+                <option>
+                    <id>product</id>
+                    <name>Product</name>
+                    <name lang="de-DE">Produkt</name>
+                </option>
+                <option>
+                    <id>price</id>
+                    <name>Price</name>
+                    <name lang="de-DE">Preis</name>
+                </option>
+            </options>
+            <defaultValue>product</defaultValue>
+        </input-field>
+
+        <input-field type="float">
+            <name>pointsCalculationPriceMultiplier</name>
+            <label>Price multiplier</label>
+            <label lang="de-DE">Preis multiplikator</label>
+            <defaultValue>1</defaultValue>
         </input-field>
     </card>
 

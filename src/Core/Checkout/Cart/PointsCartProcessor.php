@@ -7,22 +7,56 @@ use Shopware\Core\Checkout\Cart\CartBehavior;
 use Shopware\Core\Checkout\Cart\CartProcessorInterface;
 use Shopware\Core\Checkout\Cart\LineItem\CartDataCollection;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
+use Shopware\Core\System\SystemConfig\SystemConfigService;
+
+use LoyaltyProgram\Service\Points\PointsTrait;
 
 class PointsCartProcessor implements CartProcessorInterface
 {
-    public function process(CartDataCollection $data, Cart $original, Cart $toCalculate, SalesChannelContext $context, CartBehavior $behavior): void
-    {
+    /**
+     * Trait
+     */
+    use PointsTrait;
 
-        $newData = $data->get('loyalty_product_points');
+    /**
+     * @var SystemConfigService
+     */
+    private SystemConfigService $systemConfigService;
+
+    /**
+     * @param SystemConfigService $systemConfigService
+     */
+    public function __construct(SystemConfigService $systemConfigService) {
+        $this->systemConfigService = $systemConfigService;
+    }
+
+    /**
+     * Add points to cart, calculatet by config calculaten type
+     * @param CartDataCollection $data
+     * @param Cart $original
+     * @param Cart $cart
+     * @param SalesChannelContext $context
+     * @param CartBehavior $behavior
+     * @return void
+     */
+    public function process(CartDataCollection $data, Cart $original, Cart $cart, SalesChannelContext $context, CartBehavior $behavior): void
+    {
         $points = 0;
 
-        // Do stuff to the `$toCalculate` cart with your new data
-        foreach ($toCalculate->getLineItems()->getFlat() as $lineItem) {
-            if ( isset($lineItem->getPayload()['customFields']) && $lineItem->getPayload()['customFields']['loyalty_product_points'] ) {
-                $quantity = $lineItem->getQuantity();
-                $itemPoints = (int)$lineItem->getPayload()['customFields']['loyalty_product_points'];
-                $points = (int)($points + ($quantity * $itemPoints));
-            }
+        // salesChannelId
+        $salesChannelId = $context->getSalesChannelId();
+
+        // get calculation type
+        $calculationType = $this->systemConfigService->get('LoyaltyProgram.config.pointsCalculationType', $salesChannelId);
+
+
+        if ( $calculationType === 'price' ) {
+            $pointsMultiplier = $this->systemConfigService->get('LoyaltyProgram.config.pointsCalculationPriceMultiplier', $salesChannelId);
+            // calculate points by price
+            $points = $this->getPointsByLineItemPrice($cart, $context, $pointsMultiplier);
+        } else {
+            // calculate points by product
+            $points = $this->getPointsByLineItemPoints($cart, $context);
         }
 
         $data->set('loyalty_points_total', $points);

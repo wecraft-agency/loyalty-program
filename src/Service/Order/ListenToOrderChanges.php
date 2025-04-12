@@ -4,6 +4,8 @@ namespace LoyaltyProgram\Service\Order;
 
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Checkout\Order\Event\OrderStateMachineStateChangeEvent;
+use Shopware\Core\System\System;
+use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -33,15 +35,21 @@ class ListenToOrderChanges implements EventSubscriberInterface
     private EntityRepository $customerRepository;
 
     /**
+     * @var SystemConfigService
+     */
+    private SystemConfigService $systemConfigService;
+
+    /**
      * @param RequestStack $requestStack
      * @param EntityRepository $orderRepository
      * @param EntityRepository $customerRepository
      */
-    public function __construct(RequestStack $requestStack, EntityRepository $orderRepository, EntityRepository $customerRepository)
+    public function __construct(RequestStack $requestStack, EntityRepository $orderRepository, EntityRepository $customerRepository, SystemConfigService $systemConfigService)
     {
         $this->requestStack = $requestStack;
         $this->orderRepository = $orderRepository;
         $this->customerRepository = $customerRepository;
+        $this->systemConfigService = $systemConfigService;
     }
 
     /**
@@ -69,17 +77,28 @@ class ListenToOrderChanges implements EventSubscriberInterface
         // customer
         $orderCustomer = $order->getOrderCustomer()->getCustomer();
 
+        // saleschannel
+        $salesChannelId = $order->getSalesChannelId();
+
+        // get calculation type
+        $calculationType = $this->systemConfigService->get('LoyaltyProgram.config.pointsCalculationType', $salesChannelId);
+
         // return if customer is guest
         if ( $orderCustomer->getGuest() ) {
             return;
         }
 
         $orderCustomerId = $orderCustomer->getId();
-        $customerPoints = $this->getPointsByCustomer($orderCustomer, $event->getContext());
         $customerPointsPending = $this->getPointsPendingByCustomer($orderCustomer, $event->getContext());
 
         // points get
-        $orderPoints = $this->getPointsByLineItemPoints($order, $event->getContext());
+        if ( $calculationType === 'price' ) {
+            $pointsMultiplier = $this->systemConfigService->get('LoyaltyProgram.config.pointsCalculationPriceMultiplier', $salesChannelId);
+            // calculate points by price
+            $orderPoints = $this->getPointsByLineItemPrice($order, $event->getContext(), $pointsMultiplier);
+        } else {
+            $orderPoints = $this->getPointsByLineItemPoints($order, $event->getContext());
+        }
 
         // calculate points
         $calculatePendingPoints = $customerPointsPending - $orderPoints;
@@ -101,6 +120,12 @@ class ListenToOrderChanges implements EventSubscriberInterface
         // customer
         $orderCustomer = $order->getOrderCustomer()->getCustomer();
 
+        // saleschannel
+        $salesChannelId = $order->getSalesChannelId();
+
+        // get calculation type
+        $calculationType = $this->systemConfigService->get('LoyaltyProgram.config.pointsCalculationType', $salesChannelId);
+
         // return if customer is guest
         if ( $orderCustomer->getGuest() ) {
             return;
@@ -111,7 +136,14 @@ class ListenToOrderChanges implements EventSubscriberInterface
         $customerPointsPending = $this->getPointsPendingByCustomer($orderCustomer, $event->getContext());
 
         // points get
-        $orderPoints = $this->getPointsByLineItemPoints($order, $event->getContext());
+        // points get
+        if ( $calculationType === 'price' ) {
+            $pointsMultiplier = $this->systemConfigService->get('LoyaltyProgram.config.pointsCalculationPriceMultiplier', $salesChannelId);
+            // calculate points by price
+            $orderPoints = $this->getPointsByLineItemPrice($order, $event->getContext(), $pointsMultiplier);
+        } else {
+            $orderPoints = $this->getPointsByLineItemPoints($order, $event->getContext());
+        }
 
         // calculate
         $calculatePendingPoints = $customerPointsPending - $orderPoints;
