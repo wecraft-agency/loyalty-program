@@ -89,14 +89,14 @@ trait PointsTrait {
             $getUnitPrice = $lineItem->getPrice()->getUnitPrice();
             $lineItemQuantity = $lineItem->getQuantity();
 
-            $orderPoints = $orderPoints + ($lineItemQuantity * $getUnitPrice);
+            $productPoints = ($lineItemQuantity * ($getUnitPrice  * $multiplier));
+
+            // round up
+            $productPoints = ceil($productPoints / 10) * 10;
+
+            // add to orderpoints
+            $orderPoints = $productPoints + $orderPoints;
         }
-
-        // multiply
-        $orderPoints = $orderPoints * $multiplier;
-
-        // round up
-        $orderPoints = ceil($orderPoints / 10) * 10;
 
         return $orderPoints;
     }

@@ -2,9 +2,23 @@
 
 {% block component_line_item_type_product_details_container %}
     {% block component_line_item_type_product_details_container_loyalty %}
-        {% if lineItem.payload.customFields.loyalty_product_points %}
+
+        {% set loyaltyProgramConfig = config('LoyaltyProgram') %}
+        {% set pointsCalculationType = loyaltyProgramConfig.config.pointsCalculationType %}
+
+        {% set loyaltyPoints = lineItem.payload.customFields.loyalty_product_points %}
+
+        {% if pointsCalculationType == 'price' %}
+            {% set pointsCalculationPriceMultiplier = loyaltyProgramConfig.config.pointsCalculationPriceMultiplier %}
+
+            {% set loyaltyPoints = lineItem.price.unitPrice * pointsCalculationPriceMultiplier %}
+            {% set loyaltyPoints = loyaltyPoints / 10 %}
+            {% set loyaltyPoints = loyaltyPoints|round(0, 'ceil') * 10 %}
+        {% endif %}
+
+        {% if loyaltyPoints %}
             <div style="background: blue; color: white; padding: 1rem;">
-                {{ "loyaltyProgram.global.points"|trans|sw_sanitize }}: <strong>{{ lineItem.payload.customFields.loyalty_product_points }}</strong>
+                {{ "loyaltyProgram.global.points"|trans|sw_sanitize }}: <strong>{{ loyaltyPoints }}</strong>
             </div>
         {% endif %}
     {% endblock %}
