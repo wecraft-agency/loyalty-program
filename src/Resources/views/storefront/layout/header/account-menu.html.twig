@@ -4,13 +4,19 @@
     {% block layout_header_actions_account_widget_loyalty %}
         {% if context.customer and not context.customer.guest %}
             {% set loyaltyPoints = 0 %}
+            {% set loyaltyPointsPending = 0 %}
 
             {% if context.customer.customFields.loyalty_customer_points %}
                 {% set loyaltyPoints = context.customer.customFields.loyalty_customer_points %}
+                {% set loyaltyPointsPending = context.customer.customFields.loyalty_customer_points_pending %}
             {% endif %}
 
             <div style="background: blue; color: white; padding: 1rem;">
                 {{ "loyaltyProgram.global.points"|trans|sw_sanitize }}: <strong>{{ loyaltyPoints }}</strong>
+
+                {% if loyaltyPointsPending > 0 %}
+                    ({{ loyaltyPointsPending }} {{ "loyaltyProgram.global.pending"|trans|sw_sanitize }})
+                {% endif %}
             </div>
         {% endif %}
     {% endblock %}

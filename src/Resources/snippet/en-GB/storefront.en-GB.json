@@ -1,6 +1,7 @@
 {
   "loyaltyProgram": {
     "global": {
+      "pending": "pending",
       "points": "Points",
       "pointsTotal": "Points by order"
     }

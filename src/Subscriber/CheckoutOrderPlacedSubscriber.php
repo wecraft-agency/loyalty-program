@@ -9,15 +9,37 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Shopware\Core\Framework\Context;
+
+use LoyaltyProgram\Service\Points\PointsTrait;
 
 class CheckoutOrderPlacedSubscriber implements EventSubscriberInterface
 {
+    /**
+     * Trait
+     */
+    use PointsTrait;
+
+    /**
+     * @var RequestStack
+     */
     private $requestStack;
 
+    /**
+     * @var EntityRepository
+     */
     private EntityRepository $orderRepository;
 
+    /**
+     * @var EntityRepository
+     */
     private EntityRepository $customerRepository;
 
+    /**
+     * @param RequestStack $requestStack
+     * @param EntityRepository $orderRepository
+     * @param EntityRepository $customerRepository
+     */
     public function __construct(RequestStack $requestStack, EntityRepository $orderRepository, EntityRepository $customerRepository)
     {
         $this->requestStack = $requestStack;
@@ -25,6 +47,9 @@ class CheckoutOrderPlacedSubscriber implements EventSubscriberInterface
         $this->customerRepository = $customerRepository;
     }
 
+    /**
+     * @return string[]
+     */
     public static function getSubscribedEvents(): array
     {
         return [
@@ -32,15 +57,18 @@ class CheckoutOrderPlacedSubscriber implements EventSubscriberInterface
         ];
     }
 
+    /**
+     * Set points pending, on order placed
+     * @param CheckoutOrderPlacedEvent $event
+     * @return void
+     */
     public function onCheckoutOrderPlaced(CheckoutOrderPlacedEvent $event): void
     {
         $order = $event->getOrder();
         $orderId = $order->getId();
         $customer = $order->getOrderCustomer()->getCustomer();
-        $customerId = $customer->getId();
-        $lineItems = $order->getLineItems();
 
-        $orderPoints = 0;
+        $customerId = $customer->getId();
 
         // return if customer is guest
         if ( $customer->getGuest() ) {
@@ -48,17 +76,8 @@ class CheckoutOrderPlacedSubscriber implements EventSubscriberInterface
         }
 
         // iterate orderLineItems, calculate points if lineitem given points
-        foreach ( $lineItems->getElements() as $lineItem ) {
 
-            $lineItemPayload = $lineItem->getPayload();
-            $lineItemQuantity = $lineItem->getQuantity();
-
-            if ( $lineItemPayload['customFields']['loyalty_product_points'] ) {
-                $orderPointsAdd = (int)$lineItemPayload['customFields']['loyalty_product_points'];
-
-                $orderPoints = $orderPoints + ($lineItemQuantity * $orderPointsAdd);
-            }
-        }
+        $orderPoints = $this->getPointsByLineItemPoints($order, $event->getContext());
 
         // return if orderPoints equals 0
         if ( $orderPoints === 0 ) {
@@ -66,33 +85,13 @@ class CheckoutOrderPlacedSubscriber implements EventSubscriberInterface
         }
 
         // write data to order
-        $this->orderRepository->update(
-            [
-                [
-                    'id' => $orderId,
-                    'customFields' => [
-                        'loyalty_order_points' => (string)$orderPoints,
-                    ]
-                ]
-            ],
-            $event->getContext()
-        );
+        $this->setPoints($this->orderRepository, $event->getContext(), $orderPoints, $orderId, 'order');
 
         // handle points from customer
-        $customerPoints = $customer->getCustomFields()['loyalty_customer_points'] ? (int)$customer->getCustomFields()['loyalty_customer_points'] : 0;
+        $customerPoints = $this->getPointsPendingByCustomer($customer, $event->getContext());
         $customerPoints = $customerPoints + $orderPoints;
 
         // write data to customer
-        $this->customerRepository->update(
-            [
-                [
-                    'id' => $customerId,
-                    'customFields' => [
-                        'loyalty_customer_points' => (string)$customerPoints,
-                    ]
-                ]
-            ],
-            $event->getContext()
-        );
+        $this->setPoints($this->customerRepository, $event->getContext(), $customerPoints, $customerId, 'customer', 'points_pending');
     }
 }

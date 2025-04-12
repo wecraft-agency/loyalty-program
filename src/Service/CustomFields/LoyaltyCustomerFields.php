@@ -2,6 +2,7 @@
 
 namespace LoyaltyProgram\Service\CustomFields;
 
+use Cassandra\Custom;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\System\CustomField\CustomFieldTypes;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -112,11 +113,23 @@ class LoyaltyCustomerFields
                 'customFields' => [
                     [
                         'name' => self::FIELD_KEY . '_points',
-                        'type' => CustomFieldTypes::TEXT,
+                        'type' => CustomFieldTypes::NUMBER,
                         'config' => [
                             'label' => [
                                 'en-GB' => 'Points',
                                 'de-DE' => 'Punkte'
+                            ],
+                            'readonly' => true,
+                            'disabled' => true
+                        ],
+                    ],
+                    [
+                        'name' => self::FIELD_KEY . '_points_pending',
+                        'type' => CustomFieldTypes::NUMBER,
+                        'config' => [
+                            'label' => [
+                                'en-GB' => 'Points Pending',
+                                'de-DE' => 'Punkte ausstehend'
                             ],
                             'readonly' => true,
                             'disabled' => true

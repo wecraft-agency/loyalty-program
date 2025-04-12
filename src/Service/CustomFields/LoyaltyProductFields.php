@@ -112,7 +112,7 @@ class LoyaltyProductFields
                 'customFields' => [
                     [
                         'name' => self::FIELD_KEY . '_points',
-                        'type' => CustomFieldTypes::TEXT,
+                        'type' => CustomFieldTypes::NUMBER,
                         'config' => [
                             'label' => [
                                 'en-GB' => 'Points',

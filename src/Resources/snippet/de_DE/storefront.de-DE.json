@@ -1,6 +1,7 @@
 {
   "loyaltyProgram": {
     "global": {
+      "pending": "ausstehend",
       "points": "Punkte",
       "pointsTotal": "Punkte bei Bestellung"
     }
