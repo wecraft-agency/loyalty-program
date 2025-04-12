@@ -1,10 +1,45 @@
 {
   "loyalty-program": {
     "general": {
-      "mainMenuItemGeneral": "Loyalty program",
-      "descriptionTextModule": "Loyalty program",
+      "mainMenuItemLabel": "Loyalty program",
+      "mainMenuItemDescription": "Loyalty program",
       "rewardsLabel": "Rewards",
-      "redemptionsLabel": "Redemptions"
+      "rewardsSingularLabel": "Reward",
+      "redemptionsLabel": "Redemptions",
+      "campaignsLabel": "Campaigns",
+      "ranksLabel": "Ranks"
+    },
+    "rewards": {
+      "general": {
+        "create": "Add reward",
+        "buttonCancel": "Cancel",
+        "buttonSave": "Save",
+        "fieldTitleLabelName": "Name",
+        "fieldTitlePlaceholderName": "Name",
+        "settingsLabel": "Settings"
+      },
+      "list": {
+        "contentEmpty": "No rewards found.",
+        "nameLabel": "Name",
+        "typeLabel": "Type",
+        "active": "Active",
+        "pointsLabel": "Points"
+      },
+      "detail": {
+        "fieldTitleLabelImage": "Image",
+        "fieldTitleLabelName": "Name",
+        "fieldTitlePlaceholderName": "e.g. Reward 1000",
+        "fieldTitleLabelActive": "Active",
+        "fieldTitleHelpTextActive": "If not set, reward wont show in storefront and is nut redeemable",
+        "typeProductOption": "Product",
+        "typeDiscountOption": "Discount",
+        "fieldTitleLabelType": "Type",
+        "fieldTitleHelpTextType": "Discount creates coupon, product is product for cart wich can be added to order.",
+        "fieldTitlePlaceholderType": "Choose type",
+        "fieldTitleLabelPoints": "Points",
+        "fieldTitleHelpTextPoints": "Price in points",
+        "fieldTitlePlaceholderPoints": "1"
+      }
     }
   }
 }

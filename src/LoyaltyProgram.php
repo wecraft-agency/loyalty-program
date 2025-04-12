@@ -2,6 +2,7 @@
 
 namespace LoyaltyProgram;
 
+use Doctrine\DBAL\Connection;
 use Shopware\Core\Framework\Plugin;
 use Shopware\Core\Framework\Plugin\Context\ActivateContext;
 use Shopware\Core\Framework\Plugin\Context\DeactivateContext;
@@ -51,6 +52,7 @@ class LoyaltyProgram extends Plugin
      */
     public function uninstall(UninstallContext $uninstallContext): void
     {
+
         parent::uninstall($uninstallContext);
 
         if ($uninstallContext->keepUserData()) {
@@ -83,6 +85,12 @@ class LoyaltyProgram extends Plugin
         )->removeCustomFields(
             $uninstallContext->getContext()
         );
+
+        if ($uninstallContext->keepUserData()) {
+            return;
+        }
+
+        $this->cleanupDatabase();
     }
 
     /**
@@ -183,5 +191,28 @@ class LoyaltyProgram extends Plugin
      */
     public function postUpdate(UpdateContext $updateContext): void
     {
+    }
+
+    protected function columnExists(Connection $connection, string $table, string $column): bool
+    {
+        $exists = $connection->fetchOne(
+            'SHOW COLUMNS FROM `' . $table . '` WHERE `Field` LIKE :column',
+            ['column' => $column]
+        );
+
+        return !empty($exists);
+    }
+
+    private function cleanupDatabase(): void
+    {
+        $connection = $this->container->get(Connection::class);
+        if(!$connection instanceof Connection) return;
+
+        if($this->columnExists($connection, 'media', 'loyaltyRewards')) {
+            $connection->executeStatement('ALTER TABLE media DROP COLUMN loyaltyRewards');
+        }
+
+        $connection->executeStatement('DROP TABLE IF EXISTS loyalty_reward_translation');
+        $connection->executeStatement('DROP TABLE IF EXISTS loyalty_reward');
     }
 }

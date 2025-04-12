@@ -1,0 +1,132 @@
+{% block loyalty_reward_detail %}
+    <sw-page class="loyalty-reward-detail" v-if="item">
+
+        {% block loyalty_reward_detail_smart_bar_header %}
+            <template #smart-bar-header>
+                {% block loyalty_reward_detail_smart_bar_header_title %}
+                    <h2>{{ $tc('loyalty-program.general.rewardsSingularLabel') }}</h2>
+                {% endblock %}
+            </template>
+        {% endblock %}
+
+        {% block loyalty_reward_detail_smart_bar_language %}
+            <template #language-switch>
+                <sw-language-switch @on-change="onChangeLanguage"
+                                    :disabled="$route.params.newItem"></sw-language-switch>
+            </template>
+        {% endblock %}
+
+        {% block loyalty_reward_detail_smart_bar_actions %}
+            <template #smart-bar-actions>
+                {% block loyalty_reward_detail_smart_bar_actions_cancel %}
+                    <sw-button :disabled="item.isLoading" :routerLink="{ name: 'loyalty.program.rewards.index' }">
+                        {{ $tc('loyalty-program.rewards.general.buttonCancel') }}
+                    </sw-button>
+                {% endblock %}
+
+                {% block loyalty_reward_detail_smart_bar_actions_save %}
+                    <sw-button-process
+                            class="loyalty-reward-detail__save-action"
+                            :isLoading="isLoading"
+                            :processSuccess="processSuccess"
+                            variant="primary"
+                            :disabled="disabled"
+                            @process-finish="saveFinish"
+                            @click="onClickSave">
+                        {{ $tc('loyalty-program.rewards.general.buttonSave') }}
+                    </sw-button-process>
+                {% endblock %}
+            </template>
+        {% endblock %}
+
+        {% block loyalty_reward_detail_content %}
+            <template #content>
+                <sw-card-view>
+
+                    {% block loyalty_reward_detail_content_settings_media_modal %}
+                        <sw-media-modal-v2
+                                v-if="showMediaModal"
+                                :allow-multi-select="false"
+                                :initial-folder-id="mediaDefaultFolderId"
+                                :entity-context="item.getEntityName()"
+                                @modal-close="showMediaModal = false"
+                                @media-modal-selection-change="onMediaSelectionChange"
+                        />
+                    {% endblock %}
+
+                    {% block loyalty_reward_detail_content_settings_main %}
+                        <sw-card :isLoading="isLoading" v-if="item"
+                                 :title="$tc('loyalty-program.rewards.general.settingsLabel')">
+
+                        {% block loyalty_reward_detail_content_type %}
+                                <sw-single-select v-model:value="item.type"
+                                                  required
+                                                  show-clearable-button
+                                                  :options="typeOptions"
+                                                  class="loyalty-reward-detail__item_type"
+                                                  :label="$tc('loyalty-program.rewards.detail.fieldTitleLabelType')"
+                                                  :helpText="$tc('loyalty-program.rewards.detail.fieldTitleHelpTextType')"
+                                                  :placeholder="$tc('loyalty-program.rewards.detail.fieldTitlePlaceholderType')">
+                                </sw-single-select>
+                        {% endblock %}
+
+                                {% block loyalty_reward_detail_content_points %}
+                                        <sw-number-field v-model:value="item.points"
+                                                         required
+                                                         class="loyalty-reward-detail__item_points"
+                                                         numberType="int"
+                                                         min="1"
+                                                         :label="$tc('loyalty-program.rewards.detail.fieldTitleLabelPoints')"
+                                                         :helpText="$tc('loyalty-program.rewards.detail.fieldTitleHelpTextPoints')"
+                                                         :placeholder="placeholder(item, 'points', $tc('loyalty-program.rewards.detail.fieldTitlePlaceholderPoints'))">
+                                        </sw-number-field>
+                                {% endblock %}
+
+                            {% block loyalty_reward_detail_content_name %}
+                                <sw-text-field v-model:value="item.name"
+                                               required
+                                               class="loyalty-reward-detail__item_name"
+                                               :label="$tc('loyalty-program.rewards.detail.fieldTitleLabelName')"
+                                               :placeholder="$tc('loyalty-program.rewards.detail.fieldTitlePlaceholderName')">
+                                </sw-text-field>
+                            {% endblock %}
+
+                            {% block loyalty_reward_detail_content_active_checkbox_select %}
+                                <sw-switch-field v-model:value="item.active"
+                                             class="loyalty-reward-detail__item_active"
+                                             :label="$tc('loyalty-program.rewards.detail.fieldTitleLabelActive')"
+                                             :helpText="$tc('loyalty-program.rewards.detail.fieldTitleHelpTextActive')">
+                                </sw-switch-field>
+                            {% endblock %}
+
+
+                            {% block loyalty_reward_detail_content_settings_image %}
+                                <sw-upload-listener
+                                        auto-upload
+                                        :upload-tag="uploadTag"
+                                        @media-upload-finish="onUploadMedia"
+                                />
+                                <sw-media-upload-v2
+                                        class="loyalty-program-rewards-image-upload"
+                                        :upload-tag="uploadTag"
+                                        :source="mediaItem"
+                                        :source-context="item"
+                                        :default-folder="mediaDefaultFolderId"
+                                        :label="$tc('loyalty-program.rewards.detail.fieldTitleLabelImage')"
+                                        :allow-multi-select="false"
+                                        @media-drop="onDropMedia"
+                                        @media-upload-sidebar-open="onOpenMedia"
+                                        @media-upload-remove-image="onRemoveMedia"
+                                />
+                            {% endblock %}
+
+                        </sw-card>
+                    {% endblock %}
+
+
+                </sw-card-view>
+            </template>
+        {% endblock %}
+
+    </sw-page>
+{% endblock %}

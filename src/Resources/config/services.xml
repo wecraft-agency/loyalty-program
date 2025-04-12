@@ -6,8 +6,22 @@
 
     <services>
 
-        <service id="LoyaltyProgram\Subscriber\CartBeforeSerializationSubscriber">
+        <!-- Entities -->
+        <service id="LoyaltyProgram\Content\Reward\RewardDefinition">
+            <tag name="shopware.entity.definition" entity="loyalty_reward" />
+        </service>
+        <service id="LoyaltyProgram\Content\Reward\Aggregate\RewardTranslationDefintition">
+            <tag name="shopware.entity.definition" entity="loyalty_reward_translation" />
+        </service>
 
+        <!-- Extensions -->
+
+        <service id="LoyaltyProgram\Content\MediaExtension">
+            <tag name="shopware.entity.extension"/>
+        </service>
+
+        <!-- Subscribers -->
+        <service id="LoyaltyProgram\Subscriber\CartBeforeSerializationSubscriber">
             <tag name="kernel.event_subscriber"/>
         </service>
 
@@ -20,6 +34,7 @@
             <tag name="kernel.event_subscriber"/>
         </service>
 
+        <!-- Services -->
         <service id="LoyaltyProgram\Service\Order\ListenToOrderChanges">
             <argument type="service" id="request_stack" />
             <argument type="service" id="order.repository" />
@@ -29,6 +44,7 @@
             <tag name="kernel.event_subscriber"/>
         </service>
 
+        <!-- Processor -->
         <service id="LoyaltyProgram\Core\Checkout\Cart\PointsCartProcessor">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
 
