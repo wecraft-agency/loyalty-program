@@ -65,6 +65,19 @@ Component.register('loyalty-reward-detail', {
                 value: 'discount',
             }];
         },
+
+        discountMethodOptions() {
+            return [
+                {
+                    label: this.$tc('loyalty-program.rewards.detail.discountMethodFixedOption'),
+                    value: 'fixed',
+                },
+                {
+                    label: this.$tc('loyalty-program.rewards.detail.discountMethodPercentageOption'),
+                    value: 'percentage',
+                }
+            ]
+        }
     },
 
     methods: {
@@ -161,6 +174,10 @@ Component.register('loyalty-reward-detail', {
 
         onChangeLanguage() {
             this.getEntity();
+        },
+
+        onTypeChange(value) {
+            this.item.type = value;
         },
     }
 })

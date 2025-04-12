@@ -16,7 +16,8 @@
         "buttonSave": "Save",
         "fieldTitleLabelName": "Name",
         "fieldTitlePlaceholderName": "Name",
-        "settingsLabel": "Settings"
+        "settingsLabel": "Settings",
+        "discountLabel": "Discount"
       },
       "list": {
         "contentEmpty": "No rewards found.",
@@ -31,14 +32,19 @@
         "fieldTitlePlaceholderName": "e.g. Reward 1000",
         "fieldTitleLabelActive": "Active",
         "fieldTitleHelpTextActive": "If not set, reward wont show in storefront and is nut redeemable",
-        "typeProductOption": "Product",
-        "typeDiscountOption": "Discount",
         "fieldTitleLabelType": "Type",
         "fieldTitleHelpTextType": "Discount creates coupon, product is product for cart wich can be added to order.",
         "fieldTitlePlaceholderType": "Choose type",
+        "typeProductOption": "Product",
+        "typeDiscountOption": "Discount",
         "fieldTitleLabelPoints": "Points",
         "fieldTitleHelpTextPoints": "Price in points",
-        "fieldTitlePlaceholderPoints": "1"
+        "fieldTitlePlaceholderPoints": "1",
+        "discountMethodFixedOption": "Fixed",
+        "discountMethodPercentageOption": "Percentage",
+        "fieldTitleLabelDiscountMethod": "Discount method",
+        "fieldTitleHelpTextDiscountMethod": "Fixed means a fixed price, for example '10'. Percentage means a percentage on whole cart.",
+        "fieldTitlePlaceholderDiscountMethod": "Choose discount method"
       }
     }
   }

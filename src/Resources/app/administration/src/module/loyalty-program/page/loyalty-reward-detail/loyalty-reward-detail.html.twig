@@ -63,6 +63,7 @@
                                                   required
                                                   show-clearable-button
                                                   :options="typeOptions"
+                                                  @update:value="onTypeChange"
                                                   class="loyalty-reward-detail__item_type"
                                                   :label="$tc('loyalty-program.rewards.detail.fieldTitleLabelType')"
                                                   :helpText="$tc('loyalty-program.rewards.detail.fieldTitleHelpTextType')"
@@ -119,6 +120,24 @@
                                         @media-upload-remove-image="onRemoveMedia"
                                 />
                             {% endblock %}
+
+                        </sw-card>
+
+
+                        <sw-card :isLoading="isLoading" v-if="item && item.type === 'discount'"
+                                 :title="$tc('loyalty-program.rewards.general.discountLabel')">
+
+
+                                {% block loyalty_reward_detail_content_type %}
+                                        <sw-single-select v-model:value="item.discountMethod"
+                                                          show-clearable-button
+                                                          :options="discountMethodOptions"
+                                                          class="loyalty-reward-detail__item_discount_method"
+                                                          :label="$tc('loyalty-program.rewards.detail.fieldTitleLabelDiscountMethod')"
+                                                          :helpText="$tc('loyalty-program.rewards.detail.fieldTitleHelpTextDiscountMethod')"
+                                                          :placeholder="$tc('loyalty-program.rewards.detail.fieldTitlePlaceholderDiscountMethod')">
+                                        </sw-single-select>
+                                {% endblock %}
 
                         </sw-card>
                     {% endblock %}
