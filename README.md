@@ -7,5 +7,5 @@ Points getting added by order when products have points defined.
 ## What it does
 
 - Manage rewards in admin. Of type "product" or "discount".
-- Make customer gain product price based on "price" or "points of product".
+- Make customer gain points based on "price" or "points of product".
 - Giving customer points based on payment status. When status isnt "paid" points are in "pending". When status changes to "paid" points get converted to actual credits.
