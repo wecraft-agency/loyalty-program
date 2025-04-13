@@ -8,10 +8,12 @@ use Shopware\Core\Checkout\Cart\Event\CheckoutOrderPlacedEvent;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
+use Shopware\Core\System\CustomEntity\Xml\Entity;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Shopware\Core\Framework\Uuid\Uuid;
 
 use LoyaltyProgram\Service\Points\PointsTrait;
 
@@ -43,6 +45,11 @@ class CheckoutOrderPlacedSubscriber implements EventSubscriberInterface
     private EntityRepository $loyaltyCustomerRepository;
 
     /**
+     * @var EntityRepository
+     */
+    private EntityRepository $loyaltyOrderRepository;
+
+    /**
      * @var SystemConfigService
      */
     private SystemConfigService $systemConfigService;
@@ -58,7 +65,8 @@ class CheckoutOrderPlacedSubscriber implements EventSubscriberInterface
         EntityRepository $orderRepository,
         EntityRepository $customerRepository,
         SystemConfigService $systemConfigService,
-        EntityRepository $loyaltyCustomerRepository
+        EntityRepository $loyaltyCustomerRepository,
+        EntityRepository $loyaltyOrderRepository
     )
     {
         $this->requestStack = $requestStack;
@@ -66,6 +74,7 @@ class CheckoutOrderPlacedSubscriber implements EventSubscriberInterface
         $this->customerRepository = $customerRepository;
         $this->systemConfigService = $systemConfigService;
         $this->loyaltyCustomerRepository = $loyaltyCustomerRepository;
+        $this->loyaltyOrderRepository = $loyaltyOrderRepository;
     }
 
     /**
@@ -122,7 +131,16 @@ class CheckoutOrderPlacedSubscriber implements EventSubscriberInterface
         }
 
         // write data to order
-        $this->setPoints($this->orderRepository, $event->getContext(), $orderPoints, $orderId, 'order');
+        $this->loyaltyOrderRepository->create(
+            [
+                [
+                    'id' => Uuid::randomHex(),
+                    'orderId' => $orderId,
+                    'points' => $orderPoints,
+                ]
+            ],
+            Context::createDefaultContext()
+        );
 
         // update pending points
         $this->loyaltyCustomerRepository->update(

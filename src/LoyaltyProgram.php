@@ -10,9 +10,7 @@ use Shopware\Core\Framework\Plugin\Context\InstallContext;
 use Shopware\Core\Framework\Plugin\Context\UninstallContext;
 use Shopware\Core\Framework\Plugin\Context\UpdateContext;
 
-use LoyaltyProgram\Service\CustomFields\LoyaltyCustomerFields;
 use LoyaltyProgram\Service\CustomFields\LoyaltyProductFields;
-use LoyaltyProgram\Service\CustomFields\LoyaltyOrderFields;
 
 class LoyaltyProgram extends Plugin
 {
@@ -28,13 +26,6 @@ class LoyaltyProgram extends Plugin
             new LoyaltyProductFields(
                 $this->container->get('custom_field_set.repository')
             )
-        )->installCustomFields($installContext->getContext());
-
-        // Install fields to order
-        (
-        new LoyaltyOrderFields(
-            $this->container->get('custom_field_set.repository')
-        )
         )->installCustomFields($installContext->getContext());
     }
 
@@ -61,15 +52,6 @@ class LoyaltyProgram extends Plugin
             $uninstallContext->getContext()
         );
 
-        // uninstall order fields
-        (
-        new LoyaltyOrderFields(
-            $this->container->get('custom_field_set.repository')
-        )
-        )->removeCustomFields(
-            $uninstallContext->getContext()
-        );
-
         if ($uninstallContext->keepUserData()) {
             return;
         }
@@ -92,15 +74,6 @@ class LoyaltyProgram extends Plugin
         )->activateCustomFields(
             $activateContext->getContext()
         );
-
-        // activate order fields
-        (
-        new LoyaltyOrderFields(
-            $this->container->get('custom_field_set.repository')
-        )
-        )->activateCustomFields(
-            $activateContext->getContext()
-        );
     }
 
     /**
@@ -115,15 +88,6 @@ class LoyaltyProgram extends Plugin
             new LoyaltyProductFields(
                 $this->container->get('custom_field_set.repository')
             )
-        )->deactivateCustomFields(
-                $deactivateContext->getContext()
-        );
-
-        // deactivate order fields
-        (
-        new LoyaltyOrderFields(
-            $this->container->get('custom_field_set.repository')
-        )
         )->deactivateCustomFields(
                 $deactivateContext->getContext()
         );
@@ -179,5 +143,6 @@ class LoyaltyProgram extends Plugin
         $connection->executeStatement('DROP TABLE IF EXISTS loyalty_reward_translation');
         $connection->executeStatement('DROP TABLE IF EXISTS loyalty_reward');
         $connection->executeStatement('DROP TABLE IF EXISTS loyalty_customer');
+        $connection->executeStatement('DROP TABLE IF EXISTS loyalty_order');
     }
 }

@@ -3,9 +3,20 @@
 {% block page_checkout_summary %}
     {{ parent() }}
 
-    {% if page.cart.data.elements.loyalty_points_total and page.cart.data.elements.loyalty_points_total > 0 %}
+    {% set orderPointsTotal = 0 %}
+
+
+    {% if page.order and page.order.extensions.loyaltyOrder.points > 0 %}
+        {% set orderPointsTotal = page.order.extensions.loyaltyOrder.points %}
+    {% endif %}
+
+    {% if page.cart and page.cart.data.elements.loyalty_points_total > 0 %}
+        {% set orderPointsTotal = page.cart.data.elements.loyalty_points_total %}
+    {% endif %}
+
+    {% if orderPointsTotal > 0 %}
         <div style="background: blue; color: white; padding: 1rem;">
-            {{ "loyaltyProgram.global.pointsTotal"|trans|sw_sanitize }}: <strong>{{ page.cart.data.elements.loyalty_points_total }}</strong>
+            {{ "loyaltyProgram.global.pointsTotal"|trans|sw_sanitize }}: <strong>{{ orderPointsTotal }}</strong>
         </div>
     {% endif %}
 {% endblock %}

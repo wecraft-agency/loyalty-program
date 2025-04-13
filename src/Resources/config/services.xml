@@ -19,6 +19,10 @@
             <tag name="shopware.entity.definition" entity="loyalty_customer" />
         </service>
 
+        <service id="LoyaltyProgram\Content\Order\LoyaltyOrderDefinition">
+            <tag name="shopware.entity.definition" entity="loyalty_order" />
+        </service>
+
         <!-- Extensions -->
 
         <service id="LoyaltyProgram\Content\MediaExtension">
@@ -26,6 +30,10 @@
         </service>
 
         <service id="LoyaltyProgram\Content\CustomerExtension">
+            <tag name="shopware.entity.extension"/>
+        </service>
+
+        <service id="LoyaltyProgram\Content\OrderExtension">
             <tag name="shopware.entity.extension"/>
         </service>
 
@@ -40,6 +48,7 @@
             <argument type="service" id="customer.repository" />
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <argument type="service" id="loyalty_customer.repository" />
+            <argument type="service" id="loyalty_order.repository" />
 
             <tag name="kernel.event_subscriber"/>
         </service>
