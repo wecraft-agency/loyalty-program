@@ -72,7 +72,7 @@ class ListenToOrderChanges implements EventSubscriberInterface
     {
         return [
             'state_enter.order_transaction.state.paid' => 'onOrderTransactionStateChangePaid',
-            'state_enter.order_transaction.state.cancelled' => 'onOrderTransactionStateChangeCancelled',
+            'state_enter.order.state.cancelled' => 'onOrderTransactionStateChangeCancelled',
         ];
     }
 
