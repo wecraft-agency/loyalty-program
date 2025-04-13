@@ -1,0 +1,13 @@
+{% block sw_customer_detail_content_tab_after %}
+    {% parent %}
+
+    {% block sw_customer_detail_content_tab_loyalty_program %}
+        <sw-tabs-item
+                class="sw-customer-detail__tab-loyalty-program"
+                :route="{ name: 'sw.customer.detail.loyalty.program' , params: { id: $route.params.Id }}"
+                :title="$tc('loyalty-customer.tabTitle')"
+        >
+            {{ $tc('loyalty-customer.tabTitle') }}
+        </sw-tabs-item>
+    {% endblock %}
+{% endblock %}

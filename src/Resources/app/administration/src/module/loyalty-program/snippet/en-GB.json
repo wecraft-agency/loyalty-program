@@ -45,7 +45,9 @@
         "discountMethodPercentageOption": "Percentage",
         "fieldTitleLabelDiscountMethod": "Discount method",
         "fieldTitleHelpTextDiscountMethod": "Fixed means a fixed price, for example '10'. Percentage means a percentage on whole cart.",
-        "fieldTitlePlaceholderDiscountMethod": "Choose discount method"
+        "fieldTitlePlaceholderDiscountMethod": "Choose discount method",
+        "fieldTitleLabelDiscountFixed": "Discount fixed value",
+        "fieldTitleLabelDiscountPercentage": "Discount percentage"
       }
     }
   }

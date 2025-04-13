@@ -1,0 +1,60 @@
+{% block sw_customer_loyalty_program %}
+    <sw-card :title="$tc('loyalty-customer.cardPointsTitle')">
+
+        {% block sw_customer_loyalty_program_metadata_loyalty_points %}
+            <sw-description-list
+                    class="sw-order-detail__loyalty-program"
+                    grid="1fr 1fr"
+            >
+                <dt>{{ $tc('loyalty-customer.pointsLabel') }}</dt>
+
+                <dd>
+                    <template v-if="customer.extensions.loyaltyCustomer">
+                        {{ customer.extensions.loyaltyCustomer.points || '-' }}
+                    </template>
+                    <template v-else>
+                        -
+                    </template>
+                </dd>
+            </sw-description-list>
+        {% endblock %}
+        {% block sw_customer_loyalty_program_metadata_loyalty_points_pending %}
+            <sw-description-list
+                class="sw-order-detail__loyalty-program"
+                grid="1fr 1fr"
+                >
+                <dt>{{ $tc('loyalty-customer.pointsPendingLabel') }}</dt>
+
+                <dd>
+                    <template v-if="customer.extensions.loyaltyCustomer">
+                        {{ customer.extensions.loyaltyCustomer.pointsPending || '-' }}
+                    </template>
+                    <template v-else>
+                        -
+                    </template>
+                </dd>
+            </sw-description-list>
+        {% endblock %}
+        {% block sw_customer_loyalty_program_metadata_loyalty_points_total %}
+            <sw-description-list
+                    class="sw-order-detail__loyalty-program"
+                    grid="1fr 1fr"
+            >
+                <dt>{{ $tc('loyalty-customer.pointsTotalLabel') }}</dt>
+
+                <dd>
+                    <template v-if="customer.extensions.loyaltyCustomer">
+                        {{ customer.extensions.loyaltyCustomer.pointsTotal || '-' }}
+                    </template>
+                    <template v-else>
+                        -
+                    </template>
+                </dd>
+            </sw-description-list>
+        {% endblock %}
+
+    </sw-card>
+    <sw-card :title="$tc('loyalty-customer.cardRedemptionsTitle')">
+        POINTS REDEMPTIONS HISTORY
+    </sw-card>
+{% endblock %}

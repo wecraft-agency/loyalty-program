@@ -1,0 +1,29 @@
+
+{% block sw_order_detail_general_line_items_card %}
+
+    {% parent %}
+
+    {% block sw_order_detail_general_info_card %}
+        <sw-card
+                class="sw-order-detail-base__loyalty-program"
+                position-identifier="sw-order-detail-loyalty-program"
+                :title="$tc('loyalty-order.cardTitle')"
+        >
+            <sw-description-list
+                    class="sw-order-detail__loyalty-program"
+                    grid="1fr 1fr"
+            >
+                <dt>{{ $tc('loyalty-order.pointsLabel') }}</dt>
+
+                <dd>
+                    <template v-if="order.extensions.loyaltyOrder">
+                        {{ order.extensions.loyaltyOrder.points || '-' }}
+                    </template>
+                    <template v-else>
+                        -
+                    </template>
+                </dd>
+            </sw-description-list>
+        </sw-card>
+    {% endblock %}
+{% endblock %}

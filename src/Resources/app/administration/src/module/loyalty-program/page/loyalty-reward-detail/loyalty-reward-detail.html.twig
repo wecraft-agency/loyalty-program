@@ -73,7 +73,6 @@
 
                                 {% block loyalty_reward_detail_content_points %}
                                         <sw-number-field v-model:value="item.points"
-                                                         required
                                                          class="loyalty-reward-detail__item_points"
                                                          numberType="int"
                                                          min="1"
@@ -140,15 +139,37 @@
 
                                 {% block loyalty_reward_detail_content_type %}
                                         <sw-single-select v-model:value="item.discountMethod"
-                                                          show-clearable-button
-                                                          :options="discountMethodOptions"
-                                                          class="loyalty-reward-detail__item_discount_method"
-                                                          :label="$tc('loyalty-program.rewards.detail.fieldTitleLabelDiscountMethod')"
-                                                          :helpText="$tc('loyalty-program.rewards.detail.fieldTitleHelpTextDiscountMethod')"
-                                                          :placeholder="$tc('loyalty-program.rewards.detail.fieldTitlePlaceholderDiscountMethod')">
+                                                  show-clearable-button
+                                                  :options="discountMethodOptions"
+                                                  class="loyalty-reward-detail__item_discount_method"
+                                                  :label="$tc('loyalty-program.rewards.detail.fieldTitleLabelDiscountMethod')"
+                                                  :helpText="$tc('loyalty-program.rewards.detail.fieldTitleHelpTextDiscountMethod')"
+                                                  :placeholder="$tc('loyalty-program.rewards.detail.fieldTitlePlaceholderDiscountMethod')">
                                         </sw-single-select>
                                 {% endblock %}
 
+                                {% block loyalty_reward_detail_content_discount_percentage %}
+                                        <sw-number-field v-model:value="item.discountPercentage"
+                                                         required
+                                                         class="loyalty-reward-detail__item_discount_percentage"
+                                                         numberType="int"
+                                                         min="1"
+                                                         :label="$tc('loyalty-program.rewards.detail.fieldTitleLabelDiscountPercentage')">
+                                                <template #suffix>
+                                                        <span>%</span>
+                                                </template>
+                                        </sw-number-field>
+                                {% endblock %}
+
+                                {% block loyalty_reward_detail_content_discount_fixed %}
+                                        <sw-number-field v-model:value="item.discountFixed"
+                                                         required
+                                                         class="loyalty-reward-detail__item_discount_fixed"
+                                                         numberType="int"
+                                                         min="1"
+                                                         :label="$tc('loyalty-program.rewards.detail.fieldTitleLabelDiscountFixed')">
+                                        </sw-number-field>
+                                {% endblock %}
                         </sw-card>
                     {% endblock %}
 

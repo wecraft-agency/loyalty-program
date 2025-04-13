@@ -42,6 +42,8 @@ class RewardDefinition extends EntityDefinition
             (new IntField('points', 'points'))->addFlags(new Required(), new ApiAware()),
             (new StringField('type','type'))->addFlags(new Required(), new ApiAware()),
             (new StringField('discount_method','discountMethod'))->addFlags(new ApiAware()),
+            (new IntField('discount_percentage','discountPercentage'))->addFlags(new ApiAware()),
+            (new IntField('discount_fixed','discountFixed'))->addFlags(new ApiAware()),
 
             (new TranslationsAssociationField(RewardTranslationDefintition::class, 'loyalty_reward_id'))->addFlags(new ApiAware()),
             (new ManyToOneAssociationField('media', 'media_id', MediaDefinition::class, 'id', false))->addFlags(new ApiAware()),
