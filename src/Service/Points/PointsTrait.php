@@ -5,10 +5,48 @@ use Shopware\Core\Checkout\Customer\CustomerEntity;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
+use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\Checkout\Cart\Cart;
 
 trait PointsTrait {
+
+    /**
+     * @param EntityRepository $entityRepository
+     * @param Context $context
+     * @return void
+     */
+    public function getLoyaltyCustomer(EntityRepository $entityRepository, Context $context, $customerId) {
+
+        // find entities
+        $criteria = new Criteria();
+        $criteria->addFilter(new EqualsAnyFilter('customerId', [$customerId]));
+
+        // result
+        $loyaltyCustomerResult = $entityRepository->search($criteria, $context);
+
+        if ( $loyaltyCustomerResult->getTotal() > 0 ) {
+            return $loyaltyCustomerResult->getElements()[array_key_first($loyaltyCustomerResult->getElements())];
+        }
+
+        // create customer
+        $newLoyaltyCustomerId = Uuid::randomHex();
+
+        $entityRepository->create([[
+            'id' => $newLoyaltyCustomerId,
+            'customerId' => $customerId,
+        ]], $context);
+
+        // return customer by id created
+        $criteria = new Criteria();
+        $criteria->addFilter(new EqualsAnyFilter('customerId', [$customerId]));
+        $loyaltyCustomerResult = $entityRepository->search($criteria, $context);
+
+        return $loyaltyCustomerResult->getElements()[array_key_first($loyaltyCustomerResult->getElements())];
+    }
+
     /**
      * Set points
      * @param EntityRepository $entityRepository
@@ -47,7 +85,7 @@ trait PointsTrait {
      * @return int
      */
     public function getPointsPendingByCustomer(CustomerEntity $customerRepository, Context $context ) {
-        return $customerRepository->getCustomFields()['loyalty_customer_points_pending'] ? (int)$customerRepository->getCustomFields()['loyalty_customer_points_pending'] : 0;
+        return isset($customerRepository->getCustomFields()['loyalty_customer_points_pending']) ? (int)$customerRepository->getCustomFields()['loyalty_customer_points_pending'] : 0;
     }
 
     /**

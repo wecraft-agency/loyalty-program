@@ -1,0 +1,52 @@
+{% block sw_customer_base_info_metadata_right %}
+    {% parent %}
+
+    <div class="sw-customer-base-info-columns">
+        {% block sw_customer_base_metadata_loyalty_points %}
+            <sw-description-list>
+                <dt class="sw-customer-base-info__label">
+                    {{ $tc('loyalty-customer.pointsLabel') }}
+                </dt>
+                <dd class="sw-customer-base__label-loyalty-points">
+                    <template v-if="customer.extensions.loyaltyCustomer">
+                        {{ customer.extensions.loyaltyCustomer.points || '-' }}
+                    </template>
+                    <template v-else>
+                        -
+                    </template>
+                </dd>
+            </sw-description-list>
+        {% endblock %}
+        {% block sw_customer_base_metadata_loyalty_points_pending %}
+            <sw-description-list>
+                <dt class="sw-customer-base-info__label">
+                    {{ $tc('loyalty-customer.pointsPendingLabel') }}
+                </dt>
+                <dd class="sw-customer-base__label-loyalty-points-pending">
+                    <template v-if="customer.extensions.loyaltyCustomer">
+                        {{ customer.extensions.loyaltyCustomer.pointsPending || '-' }}
+                    </template>
+                    <template v-else>
+                        -
+                    </template>
+                </dd>
+            </sw-description-list>
+        {% endblock %}
+        {% block sw_customer_base_metadata_loyalty_points_total %}
+            <sw-description-list>
+                <dt class="sw-customer-base-info__label">
+                    {{ $tc('loyalty-customer.pointsTotalLabel') }}
+                </dt>
+
+                <dd class="sw-customer-base__label-loyalty-points-total">
+                    <template v-if="customer.extensions.loyaltyCustomer">
+                        {{ customer.extensions.loyaltyCustomer.pointsTotal || '-' }}
+                    </template>
+                    <template v-else>
+                        -
+                    </template>
+                </dd>
+            </sw-description-list>
+        {% endblock %}
+    </div>
+{% endblock %}

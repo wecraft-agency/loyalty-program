@@ -1,0 +1,7 @@
+{
+  "loyalty-customer": {
+    "pointsLabel": "Punkte",
+    "pointsTotalLabel": "Punkte insgesamt verdient",
+    "pointsPendingLabel": "Punkte ausstehend"
+  }
+}

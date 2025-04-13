@@ -10,13 +10,22 @@
         <service id="LoyaltyProgram\Content\Reward\RewardDefinition">
             <tag name="shopware.entity.definition" entity="loyalty_reward" />
         </service>
+
         <service id="LoyaltyProgram\Content\Reward\Aggregate\RewardTranslationDefintition">
             <tag name="shopware.entity.definition" entity="loyalty_reward_translation" />
+        </service>
+
+        <service id="LoyaltyProgram\Content\Customer\LoyaltyCustomerDefinition">
+            <tag name="shopware.entity.definition" entity="loyalty_customer" />
         </service>
 
         <!-- Extensions -->
 
         <service id="LoyaltyProgram\Content\MediaExtension">
+            <tag name="shopware.entity.extension"/>
+        </service>
+
+        <service id="LoyaltyProgram\Content\CustomerExtension">
             <tag name="shopware.entity.extension"/>
         </service>
 
@@ -30,6 +39,7 @@
             <argument type="service" id="order.repository" />
             <argument type="service" id="customer.repository" />
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="loyalty_customer.repository" />
 
             <tag name="kernel.event_subscriber"/>
         </service>
@@ -40,6 +50,7 @@
             <argument type="service" id="order.repository" />
             <argument type="service" id="customer.repository" />
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="loyalty_customer.repository" />
 
             <tag name="kernel.event_subscriber"/>
         </service>

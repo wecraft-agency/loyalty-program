@@ -3,6 +3,7 @@
 namespace LoyaltyProgram\Content;
 
 use LoyaltyProgram\Content\Reward\RewardDefinition;
+
 use Shopware\Core\Content\Media\MediaDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityExtension;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;

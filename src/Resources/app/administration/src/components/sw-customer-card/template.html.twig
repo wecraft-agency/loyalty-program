@@ -1,0 +1,27 @@
+{% block sw_customer_card_metadata_additional %}
+    {% parent %}
+    <sw-number-field
+            v-if="editMode"
+            v-model="loyaltyPoints"
+            disabled
+            readonly
+            :label="$tc('loyalty-customer.pointsLabel')"
+    >
+    </sw-number-field>
+    <sw-number-field
+            v-if="editMode"
+            v-model="loyaltyPointsPending"
+            disabled
+            readonly
+            :label="$tc('loyalty-customer.pointsPendingLabel')"
+    >
+    </sw-number-field>
+    <sw-number-field
+            v-if="editMode"
+            v-model="loyaltyPointsTotal"
+            disabled
+            readonly
+            :label="$tc('loyalty-customer.pointsTotalLabel')"
+    >
+    </sw-number-field>
+{% endblock %}

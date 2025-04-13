@@ -2,6 +2,7 @@
 
 namespace LoyaltyProgram\Service\Order;
 
+use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Checkout\Order\Event\OrderStateMachineStateChangeEvent;
 use Shopware\Core\System\System;
@@ -35,6 +36,11 @@ class ListenToOrderChanges implements EventSubscriberInterface
     private EntityRepository $customerRepository;
 
     /**
+     * @var EntityRepository
+     */
+    private EntityRepository $loyaltyCustomerRepository;
+
+    /**
      * @var SystemConfigService
      */
     private SystemConfigService $systemConfigService;
@@ -44,12 +50,19 @@ class ListenToOrderChanges implements EventSubscriberInterface
      * @param EntityRepository $orderRepository
      * @param EntityRepository $customerRepository
      */
-    public function __construct(RequestStack $requestStack, EntityRepository $orderRepository, EntityRepository $customerRepository, SystemConfigService $systemConfigService)
+    public function __construct(
+        RequestStack $requestStack,
+        EntityRepository $orderRepository,
+        EntityRepository $customerRepository,
+        SystemConfigService $systemConfigService,
+        EntityRepository $loyaltyCustomerRepository
+    )
     {
         $this->requestStack = $requestStack;
         $this->orderRepository = $orderRepository;
         $this->customerRepository = $customerRepository;
         $this->systemConfigService = $systemConfigService;
+        $this->loyaltyCustomerRepository = $loyaltyCustomerRepository;
     }
 
     /**
@@ -89,7 +102,12 @@ class ListenToOrderChanges implements EventSubscriberInterface
         }
 
         $orderCustomerId = $orderCustomer->getId();
-        $customerPointsPending = $this->getPointsPendingByCustomer($orderCustomer, $event->getContext());
+
+        // loyalty customer
+        $loyaltyCustomer = $this->getLoyaltyCustomer($this->loyaltyCustomerRepository, Context::createDefaultContext(), $orderCustomerId);
+
+        // pending points
+        $customerPointsPending = $loyaltyCustomer->getPointsPending();
 
         // points get
         if ( $calculationType === 'price' ) {
@@ -103,8 +121,16 @@ class ListenToOrderChanges implements EventSubscriberInterface
         // calculate points
         $calculatePendingPoints = $customerPointsPending - $orderPoints;
 
-        // remove from panding
-        $this->setPoints($this->customerRepository, $event->getContext(), $calculatePendingPoints, $orderCustomerId, 'customer', 'points_pending');
+        // update pending points
+        $this->loyaltyCustomerRepository->update(
+            [
+                [
+                    'id' => $loyaltyCustomer->getId(),
+                    'pointsPending' => (int)$calculatePendingPoints,
+                ]
+            ],
+            Context::createDefaultContext()
+        );
     }
 
     /**
@@ -132,10 +158,16 @@ class ListenToOrderChanges implements EventSubscriberInterface
         }
 
         $orderCustomerId = $orderCustomer->getId();
-        $customerPoints = $this->getPointsByCustomer($orderCustomer, $event->getContext());
-        $customerPointsPending = $this->getPointsPendingByCustomer($orderCustomer, $event->getContext());
 
-        // points get
+
+        // loyalty customer
+        $loyaltyCustomer = $this->getLoyaltyCustomer($this->loyaltyCustomerRepository, Context::createDefaultContext(), $orderCustomerId);
+
+        // Customer points
+        $customerPoints = $loyaltyCustomer->getPoints();
+        $customerPointsTotal = $loyaltyCustomer->getPointsTotal();
+        $customerPointsPending = $loyaltyCustomer->getPointsPending();
+
         // points get
         if ( $calculationType === 'price' ) {
             $pointsMultiplier = $this->systemConfigService->get('LoyaltyProgram.config.pointsCalculationPriceMultiplier', $salesChannelId);
@@ -148,10 +180,26 @@ class ListenToOrderChanges implements EventSubscriberInterface
         // calculate
         $calculatePendingPoints = $customerPointsPending - $orderPoints;
         $calculateCustomerPoints = $customerPoints + $orderPoints;
+        $calculateTotalPoints = $customerPointsTotal + $orderPoints;
 
         // add points to customer, remove from pending
-        $this->setPoints($this->customerRepository, $event->getContext(), $calculateCustomerPoints, $orderCustomerId, 'customer');
-        $this->setPoints($this->customerRepository, $event->getContext(), $calculatePendingPoints, $orderCustomerId, 'customer', 'points_pending');
+        $this->loyaltyCustomerRepository->update(
+            [
+                [
+                    'id' => $loyaltyCustomer->getId(),
+                    'pointsPending' => (int)$calculatePendingPoints,
+                ],
+                [
+                    'id' => $loyaltyCustomer->getId(),
+                    'points' => (int)$calculateCustomerPoints,
+                ],
+                [
+                    'id' => $loyaltyCustomer->getId(),
+                    'pointsTotal' => (int)$calculateTotalPoints,
+                ]
+            ],
+            Context::createDefaultContext()
+        );
     }
 
 }

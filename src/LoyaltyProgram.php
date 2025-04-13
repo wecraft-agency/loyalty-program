@@ -30,13 +30,6 @@ class LoyaltyProgram extends Plugin
             )
         )->installCustomFields($installContext->getContext());
 
-        // Install fields to customer
-        (
-        new LoyaltyCustomerFields(
-            $this->container->get('custom_field_set.repository')
-        )
-        )->installCustomFields($installContext->getContext());
-
         // Install fields to order
         (
         new LoyaltyOrderFields(
@@ -68,15 +61,6 @@ class LoyaltyProgram extends Plugin
             $uninstallContext->getContext()
         );
 
-        // uninstall customer fields
-        (
-            new LoyaltyCustomerFields(
-                $this->container->get('custom_field_set.repository')
-            )
-        )->removeCustomFields(
-            $uninstallContext->getContext()
-        );
-
         // uninstall order fields
         (
         new LoyaltyOrderFields(
@@ -100,16 +84,6 @@ class LoyaltyProgram extends Plugin
      */
     public function activate(ActivateContext $activateContext): void
     {
-        // activate customer fields
-        (
-            new LoyaltyCustomerFields(
-                $this->container->get('custom_field_set.repository')
-            )
-        )->activateCustomFields(
-            $activateContext->getContext()
-        );
-
-
         // activate product fields
         (
             new LoyaltyProductFields(
@@ -118,7 +92,6 @@ class LoyaltyProgram extends Plugin
         )->activateCustomFields(
             $activateContext->getContext()
         );
-
 
         // activate order fields
         (
@@ -137,15 +110,6 @@ class LoyaltyProgram extends Plugin
      */
     public function deactivate(DeactivateContext $deactivateContext): void
     {
-        // deactivate customer fields
-        (
-            new LoyaltyCustomerFields(
-                $this->container->get('custom_field_set.repository')
-            )
-        )->deactivateCustomFields(
-            $deactivateContext->getContext()
-        );
-
         // deactivate product fields
         (
             new LoyaltyProductFields(
@@ -214,5 +178,6 @@ class LoyaltyProgram extends Plugin
 
         $connection->executeStatement('DROP TABLE IF EXISTS loyalty_reward_translation');
         $connection->executeStatement('DROP TABLE IF EXISTS loyalty_reward');
+        $connection->executeStatement('DROP TABLE IF EXISTS loyalty_customer');
     }
 }

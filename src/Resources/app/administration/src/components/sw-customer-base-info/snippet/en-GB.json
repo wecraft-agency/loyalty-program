@@ -1,0 +1,7 @@
+{
+  "loyalty-customer": {
+    "pointsLabel": "Points",
+    "pointsTotalLabel": "Points total awarded",
+    "pointsPendingLabel": "Points pending"
+  }
+}

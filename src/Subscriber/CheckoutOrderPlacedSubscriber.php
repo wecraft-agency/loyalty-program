@@ -2,15 +2,16 @@
 
 namespace LoyaltyProgram\Subscriber;
 
+use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Checkout\Cart\Event\CheckoutOrderPlacedEvent;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Shopware\Core\Framework\Context;
 
 use LoyaltyProgram\Service\Points\PointsTrait;
 
@@ -37,6 +38,11 @@ class CheckoutOrderPlacedSubscriber implements EventSubscriberInterface
     private EntityRepository $customerRepository;
 
     /**
+     * @var EntityRepository
+     */
+    private EntityRepository $loyaltyCustomerRepository;
+
+    /**
      * @var SystemConfigService
      */
     private SystemConfigService $systemConfigService;
@@ -47,12 +53,19 @@ class CheckoutOrderPlacedSubscriber implements EventSubscriberInterface
      * @param EntityRepository $customerRepository
      * @param SystemConfigService $systemConfigService
      */
-    public function __construct(RequestStack $requestStack, EntityRepository $orderRepository, EntityRepository $customerRepository, SystemConfigService $systemConfigService)
+    public function __construct(
+        RequestStack $requestStack,
+        EntityRepository $orderRepository,
+        EntityRepository $customerRepository,
+        SystemConfigService $systemConfigService,
+        EntityRepository $loyaltyCustomerRepository
+    )
     {
         $this->requestStack = $requestStack;
         $this->orderRepository = $orderRepository;
         $this->customerRepository = $customerRepository;
         $this->systemConfigService = $systemConfigService;
+        $this->loyaltyCustomerRepository = $loyaltyCustomerRepository;
     }
 
     /**
@@ -79,6 +92,9 @@ class CheckoutOrderPlacedSubscriber implements EventSubscriberInterface
         // customer
         $customer = $order->getOrderCustomer()->getCustomer();
         $customerId = $customer->getId();
+
+        // get current loyaltyCustomer extension
+        $loyaltyCustomer = $this->getLoyaltyCustomer($this->loyaltyCustomerRepository, Context::createDefaultContext(), $customerId);
 
         // saleschannel
         $salesChannelId = $order->getSalesChannelId();
@@ -108,11 +124,15 @@ class CheckoutOrderPlacedSubscriber implements EventSubscriberInterface
         // write data to order
         $this->setPoints($this->orderRepository, $event->getContext(), $orderPoints, $orderId, 'order');
 
-        // handle points from customer
-        $customerPoints = $this->getPointsPendingByCustomer($customer, $event->getContext());
-        $customerPoints = $customerPoints + $orderPoints;
-
-        // write data to customer
-        $this->setPoints($this->customerRepository, $event->getContext(), $customerPoints, $customerId, 'customer', 'points_pending');
+        // update pending points
+        $this->loyaltyCustomerRepository->update(
+            [
+                [
+                    'id' => $loyaltyCustomer->getId(),
+                    'pointsPending' => $loyaltyCustomer->getPointsPending() + (int)$orderPoints,
+                ]
+            ],
+            Context::createDefaultContext()
+        );
     }
 }
