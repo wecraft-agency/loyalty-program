@@ -139,6 +139,10 @@ Component.register('loyalty-reward-detail', {
             });
         },
 
+        onEditorChange(content) {
+            this.item.description = content;
+        },
+
         saveFinish() {
             this.processSuccess = false;
         },

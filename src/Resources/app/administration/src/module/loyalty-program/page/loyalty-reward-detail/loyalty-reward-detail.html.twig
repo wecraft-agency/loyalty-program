@@ -92,6 +92,16 @@
                                 </sw-text-field>
                             {% endblock %}
 
+                                {% block loyalty_reward_detail_content_description %}
+                                        <sw-text-editor v-model:value="item.description"
+                                                        :label="$tc('loyalty-program.rewards.detail.fieldTitleLabelDescription')"
+                                                        @input="onEditorChange"
+                                                        @blur="onEditorChange">
+                                        </sw-text-editor>
+                                {% endblock %}
+
+
+
                             {% block loyalty_reward_detail_content_active_checkbox_select %}
                                 <sw-switch-field v-model:value="item.active"
                                              class="loyalty-reward-detail__item_active"

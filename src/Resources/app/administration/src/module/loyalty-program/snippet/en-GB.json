@@ -29,6 +29,7 @@
       "detail": {
         "fieldTitleLabelImage": "Image",
         "fieldTitleLabelName": "Name",
+        "fieldTitleLabelDescription": "Description",
         "fieldTitlePlaceholderName": "e.g. Reward 1000",
         "fieldTitleLabelActive": "Active",
         "fieldTitleHelpTextActive": "If not set, reward wont show in storefront and is nut redeemable",
