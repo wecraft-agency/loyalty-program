@@ -142,6 +142,7 @@ class LoyaltyProgram extends Plugin
 
         $connection->executeStatement('DROP TABLE IF EXISTS loyalty_reward_translation');
         $connection->executeStatement('DROP TABLE IF EXISTS loyalty_reward');
+        $connection->executeStatement('DROP TABLE IF EXISTS loyalty_redemption');
         $connection->executeStatement('DROP TABLE IF EXISTS loyalty_customer');
         $connection->executeStatement('DROP TABLE IF EXISTS loyalty_order');
     }

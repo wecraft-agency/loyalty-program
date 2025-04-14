@@ -1,0 +1,123 @@
+{% block loyalty_redemption_list %}
+
+    <sw-page class="loyalty-redemption-list">
+
+        {% block loyalty_redemption_list_smart_bar_header %}
+            <template #smart-bar-header>
+                {% block loyalty_redemption_list_smart_bar_header_title %}
+                    <h2>
+                        {% block loyalty_redemption_list_smart_bar_header_title_text %}
+                            {{ $tc('loyalty-program.general.redemptionsLabel') }}
+                        {% endblock %}
+
+                        {% block loyalty_redemption_list_smart_bar_header_amount %}
+                            <span v-if="!isLoading" class="sw-page__smart-bar-amount">
+                        ({{ total }})
+                        </span>
+                        {% endblock %}
+                    </h2>
+                {% endblock %}
+            </template>
+        {% endblock %}
+
+        {% block loyalty_redemption_list_cardview %}
+            <template #content>
+                <div class="loyalty-redemption-list__content">
+                    {% block loyalty_redemption_list_content %}
+                        <sw-entity-listing class="loyalty-redemption-list-grid"
+                                           v-if="items && total > 0"
+                                           :items="items"
+                                           :repository="entityRepository"
+                                           :showSeleciton="true"
+                                           :isLoading="isLoading"
+                                           :columns="columns">
+
+                            <template #column-createdAt="{ item }">
+                                {{ dateFilter(item.createdAt, { hour: '2-digit', minute: '2-digit' }) }}
+                            </template>
+
+                            <template #column-points="{ item }">
+                                <template v-if="item.type === 'awarded'">
+                                    + {{ item.points }}
+                                </template>
+                                <template v-else>
+                                    - {{ item.points }}
+                                </template>
+                            </template>
+
+                            <template #column-customerName="{ item }">
+                                <router-link :to="{ name: 'sw.customer.detail', params: { id: item.customer.id } }">
+                                    {{ item.customer.lastName }},{{ item.customer.firstName }}
+                                </router-link>
+                            </template>
+
+                            <template #column-orderNumber="{ item }">
+                                <router-link :to="{ name: 'sw.order.detail', params: { id: item.order.id } }">
+                                    {{ item.order.orderNumber }}
+                                </router-link>
+                            </template>
+
+                            <template #column-type="{ item }">
+                                <sw-label
+                                        v-if="item.type === 'awarded'"
+                                        variant="info"
+                                        appearance="pill"
+                                >
+                                    {{ item.type }}
+                                </sw-label>
+                                <sw-label
+                                        v-else
+                                        appearance="pill"
+                                >
+                                    {{ item.type }}
+                                </sw-label>
+                            </template>
+
+                            <template #column-status="{ item }">
+                                <sw-label
+                                        v-if="item.status === 'pending'"
+                                        variant="warning"
+                                        appearance="pill"
+                                >
+                                    {{ item.status }}
+                                </sw-label>
+                                <sw-label
+                                        v-else-if="item.status === 'cancelled'"
+                                        variant="danger"
+                                        appearance="pill"
+                                >
+                                    {{ item.status }}
+                                </sw-label>
+                                <sw-label
+                                        v-else
+                                        variant="success"
+                                        appearance="pill"
+                                >
+                                    {{ item.status }}
+                                </sw-label>
+                            </template>
+
+                            <template #pagination>
+                                {% block sw_order_list_grid_pagination %}
+                                    <sw-pagination :page="page"
+                                                   :limit="limit"
+                                                   :total="total"
+                                                   :total-visible="7"
+                                                   @page-change="onPageChange">
+                                    </sw-pagination>
+                                {% endblock %}
+                            </template>
+
+                        </sw-entity-listing>
+                    {% endblock %}
+
+                    {% block loyalty_redemption_list_empty_state %}
+                        <sw-empty-state v-if="!isLoading && total === 0" :title="$tc('loyalty-program.rewards.list.contentEmpty')"></sw-empty-state>
+                    {% endblock %}
+
+                </div>
+            </template>
+        {% endblock %}
+
+    </sw-page>
+{% endblock %}

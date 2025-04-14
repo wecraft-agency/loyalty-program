@@ -2,7 +2,7 @@
 
 namespace LoyaltyProgram\Content;
 
-use LoyaltyProgram\Content\Reward\RewardDefinition;
+use LoyaltyProgram\Content\Redemption\RedemptionDefinition;
 
 use Shopware\Core\Content\Media\MediaDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityExtension;
@@ -18,7 +18,7 @@ class MediaExtension extends EntityExtension
         $collection->add(
             (new OneToManyAssociationField(
                 'loyaltyRewards',
-                RewardDefinition::class,
+                RedemptionDefinition::class,
                 'media_id',
                 'id')
             )->addFlags(new CascadeDelete(), new ApiAware())

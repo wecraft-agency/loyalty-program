@@ -1,9 +1,9 @@
-import template from './loyalty-reward-list.html.twig';
+import template from './loyalty-redemption-list.html.twig';
 
 const { Component, Mixin } = Shopware;
 const { Criteria } = Shopware.Data;
 
-Component.register('loyalty-reward-list', {
+Component.register('loyalty-redemption-list', {
     template,
 
     inject: [
@@ -34,7 +34,11 @@ Component.register('loyalty-reward-list', {
 
     computed: {
         entityRepository() {
-            return this.repositoryFactory.create('loyalty_reward');
+            return this.repositoryFactory.create('loyalty_redemption');
+        },
+
+        dateFilter() {
+            return Shopware.Filter.getByName('date');
         },
 
         columns() {
@@ -47,10 +51,18 @@ Component.register('loyalty-reward-list', {
             this.isLoading = true;
             const criteria = new Criteria(this.page, this.limit);
 
+            criteria.addAssociation('customer');
+            criteria.addAssociation('order');
+            criteria.addSorting(
+                Criteria.sort('createdAt', 'DESC')
+            )
+
             this.entityRepository.search(criteria, Shopware.Context.api).then((items) => {
                 this.total = items.total;
                 this.items = items;
                 this.isLoading = false;
+
+                console.log(items);
 
                 return items;
             }).catch(() => {
@@ -69,19 +81,24 @@ Component.register('loyalty-reward-list', {
         getColumns() {
             return [
                 {
-                    property: 'name',
-                    dataIndex: 'name',
-                    inlineEdit: 'string',
-                    routerLink: 'loyalty.program.rewards.detail',
-                    label: this.$tc('loyalty-program.rewards.list.nameLabel'),
+                    property: 'createdAt',
+                    dataIndex: 'createdAt',
+                    label: this.$tc('loyalty-program.redemptions.list.dateLabel'),
                     allowResize: true,
                     primary: true
+
                 },
                 {
                     property: 'type',
                     dataIndex: 'type',
-                    inlineEdit: 'string',
-                    label: this.$tc('loyalty-program.rewards.list.typeLabel'),
+                    label: this.$tc('loyalty-program.redemptions.list.typeLabel'),
+                    allowResize: true,
+                    primary: true
+                },
+                {
+                    property: 'status',
+                    dataIndex: 'status',
+                    label: this.$tc('loyalty-program.redemptions.list.statusLabel'),
                     allowResize: true,
                     primary: true
                 },
@@ -89,21 +106,21 @@ Component.register('loyalty-reward-list', {
                     property: 'points',
                     dataIndex: 'points',
                     inlineEdit: 'number',
-                    label: this.$tc('loyalty-program.rewards.list.pointsLabel'),
+                    label: this.$tc('loyalty-program.redemptions.list.pointsLabel'),
                     allowResize: true,
                     primary: true
                 },
                 {
-                    property: 'discountMethod',
-                    dataIndex: 'discountMethod',
-                    label: this.$tc('loyalty-program.rewards.list.discountMethodLabel'),
+                    property: 'customerName',
+                    dataIndex: 'customer.firstName,customer.lastName',
+                    label: 'sw-order.list.columnCustomerName',
                     allowResize: true,
-                    primary: true
                 },
                 {
-                    property: 'active',
-                    label: this.$tc('loyalty-program.rewards.list.active'),
-                    inlineEdit: 'boolean',
+                    property: 'orderNumber',
+                    dataIndex: 'order.orderNumber',
+                    label: 'sw-order.list.columnOrderNumber',
+                    allowResize: true,
                 },
             ]
         },

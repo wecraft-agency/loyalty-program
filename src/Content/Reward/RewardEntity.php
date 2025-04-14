@@ -14,6 +14,14 @@ class RewardEntity extends Entity
 
     protected ?string $description;
 
+    protected ?string $type;
+
+    protected ?string $discountMethod;
+
+    protected ?int $discountPercentage;
+
+    protected ?int $discountFixed;
+
     protected bool $active;
 
     /**
@@ -44,6 +52,46 @@ class RewardEntity extends Entity
     public function setDescription(?string $description): void
     {
         $this->description = $description;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(?string $type): void
+    {
+        $this->type = $type;
+    }
+
+    public function getDiscountMethod(): ?string
+    {
+        return $this->discountMethod;
+    }
+
+    public function setDiscountMethod(?string $discountMethod): void
+    {
+        $this->discountMethod = $discountMethod;
+    }
+
+    public function getDiscountPercentage(): ?int
+    {
+        return $this->discountPercentage;
+    }
+
+    public function setDiscountPercentage(?int $discountPercentage): void
+    {
+        $this->discountPercentage = $discountPercentage;
+    }
+
+    public function getDiscountFixed(): ?int
+    {
+        return $this->discountFixed;
+    }
+
+    public function setDiscountFixed(?int $discountFixed): void
+    {
+        $this->discountFixed = $discountFixed;
     }
 
     public function isActive(): bool

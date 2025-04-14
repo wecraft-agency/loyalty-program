@@ -50,6 +50,11 @@ class CheckoutOrderPlacedSubscriber implements EventSubscriberInterface
     private EntityRepository $loyaltyOrderRepository;
 
     /**
+     * @var EntityRepository
+     */
+    private EntityRepository $loyaltyRedemptionRepository;
+
+    /**
      * @var SystemConfigService
      */
     private SystemConfigService $systemConfigService;
@@ -66,7 +71,8 @@ class CheckoutOrderPlacedSubscriber implements EventSubscriberInterface
         EntityRepository $customerRepository,
         SystemConfigService $systemConfigService,
         EntityRepository $loyaltyCustomerRepository,
-        EntityRepository $loyaltyOrderRepository
+        EntityRepository $loyaltyOrderRepository,
+        EntityRepository $loyaltyRedemptionRepository
     )
     {
         $this->requestStack = $requestStack;
@@ -75,6 +81,7 @@ class CheckoutOrderPlacedSubscriber implements EventSubscriberInterface
         $this->systemConfigService = $systemConfigService;
         $this->loyaltyCustomerRepository = $loyaltyCustomerRepository;
         $this->loyaltyOrderRepository = $loyaltyOrderRepository;
+        $this->loyaltyRedemptionRepository = $loyaltyRedemptionRepository;
     }
 
     /**
@@ -129,6 +136,21 @@ class CheckoutOrderPlacedSubscriber implements EventSubscriberInterface
         if ( $orderPoints === 0 ) {
             return;
         }
+
+        // create redemption
+        $this->loyaltyRedemptionRepository->create(
+            [
+                [
+                    'id' => Uuid::randomHex(),
+                    'orderId' => $orderId,
+                    'customerId' => $customerId,
+                    'points' => (int)$orderPoints,
+                    'type' => 'awarded',
+                    'status' => 'pending'
+                ]
+            ],
+            Context::createDefaultContext()
+        );
 
         // write data to order
         $this->loyaltyOrderRepository->create(

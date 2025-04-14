@@ -41,6 +41,11 @@ class ListenToOrderChanges implements EventSubscriberInterface
     private EntityRepository $loyaltyCustomerRepository;
 
     /**
+     * @var EntityRepository
+     */
+    private EntityRepository $loyaltyRedemptionRepository;
+
+    /**
      * @var SystemConfigService
      */
     private SystemConfigService $systemConfigService;
@@ -55,7 +60,8 @@ class ListenToOrderChanges implements EventSubscriberInterface
         EntityRepository $orderRepository,
         EntityRepository $customerRepository,
         SystemConfigService $systemConfigService,
-        EntityRepository $loyaltyCustomerRepository
+        EntityRepository $loyaltyCustomerRepository,
+        EntityRepository $loyaltyRedemptionRepository
     )
     {
         $this->requestStack = $requestStack;
@@ -63,6 +69,7 @@ class ListenToOrderChanges implements EventSubscriberInterface
         $this->customerRepository = $customerRepository;
         $this->systemConfigService = $systemConfigService;
         $this->loyaltyCustomerRepository = $loyaltyCustomerRepository;
+        $this->loyaltyRedemptionRepository = $loyaltyRedemptionRepository;
     }
 
     /**
@@ -83,6 +90,9 @@ class ListenToOrderChanges implements EventSubscriberInterface
      */
     public function onOrderTransactionStateChangeCancelled(OrderStateMachineStateChangeEvent $event): void
     {
+        // context
+        $context = $event->getContext();
+
         // order
         $order = $event->getOrder();
 
@@ -103,7 +113,7 @@ class ListenToOrderChanges implements EventSubscriberInterface
         $orderCustomerId = $orderCustomer->getId();
 
         // loyalty customer
-        $loyaltyCustomer = $this->getLoyaltyCustomer($this->loyaltyCustomerRepository, Context::createDefaultContext(), $orderCustomerId);
+        $loyaltyCustomer = $this->getLoyaltyCustomer($this->loyaltyCustomerRepository, $context, $orderCustomerId);
 
         // pending points
         $customerPointsPending = $loyaltyCustomer->getPointsPending();
@@ -128,8 +138,23 @@ class ListenToOrderChanges implements EventSubscriberInterface
                     'pointsPending' => (int)$calculatePendingPoints,
                 ]
             ],
-            Context::createDefaultContext()
+            $context
         );
+
+        // update redemption
+        $getRedemption = $this->getRedemptionByOrder($this->loyaltyRedemptionRepository, $context, $order->getId());
+
+        if ( !is_null($getRedemption)) {
+            $this->loyaltyRedemptionRepository->update(
+                [
+                    [
+                        'id' => $getRedemption->getId(),
+                        'status' => 'cancelled'
+                    ]
+                ],
+                $context
+            );
+        }
     }
 
     /**
@@ -139,6 +164,9 @@ class ListenToOrderChanges implements EventSubscriberInterface
      */
     public function onOrderTransactionStateChangePaid(OrderStateMachineStateChangeEvent $event): void
     {
+        // context
+        $context = $event->getContext();
+
         // order
         $order = $event->getOrder();
 
@@ -160,7 +188,7 @@ class ListenToOrderChanges implements EventSubscriberInterface
 
 
         // loyalty customer
-        $loyaltyCustomer = $this->getLoyaltyCustomer($this->loyaltyCustomerRepository, Context::createDefaultContext(), $orderCustomerId);
+        $loyaltyCustomer = $this->getLoyaltyCustomer($this->loyaltyCustomerRepository, $context, $orderCustomerId);
 
         // Customer points
         $customerPoints = $loyaltyCustomer->getPoints();
@@ -181,6 +209,22 @@ class ListenToOrderChanges implements EventSubscriberInterface
         $calculateCustomerPoints = $customerPoints + $orderPoints;
         $calculateTotalPoints = $customerPointsTotal + $orderPoints;
 
+
+        // update redemption
+        $getRedemption = $this->getRedemptionByOrder($this->loyaltyRedemptionRepository, $context, $order->getId());
+
+        if ( !is_null($getRedemption)) {
+            $this->loyaltyRedemptionRepository->update(
+                [
+                    [
+                        'id' => $getRedemption->getId(),
+                        'status' => 'finished'
+                    ]
+                ],
+                $context
+            );
+        }
+
         // add points to customer, remove from pending
         $this->loyaltyCustomerRepository->update(
             [
@@ -195,9 +239,9 @@ class ListenToOrderChanges implements EventSubscriberInterface
                 [
                     'id' => $loyaltyCustomer->getId(),
                     'pointsTotal' => (int)$calculateTotalPoints,
-                ]
+                ],
             ],
-            Context::createDefaultContext()
+            $context
         );
     }
 

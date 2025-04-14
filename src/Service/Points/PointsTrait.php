@@ -14,9 +14,11 @@ use Shopware\Core\Checkout\Cart\Cart;
 trait PointsTrait {
 
     /**
+     * Get LoyaltyCustomer by customer id
+     *
      * @param EntityRepository $entityRepository
      * @param Context $context
-     * @return void
+     * @return mixed|\Shopware\Core\Framework\DataAbstractionLayer\Search\TElement|null
      */
     public function getLoyaltyCustomer(EntityRepository $entityRepository, Context $context, $customerId) {
 
@@ -48,44 +50,26 @@ trait PointsTrait {
     }
 
     /**
-     * Set points
+     * Get redemption by order id
+     *
      * @param EntityRepository $entityRepository
      * @param Context $context
-     * @param $points
-     * @param $entityId
-     * @param $entity
-     * @return void
+     * @param $orderId
+     * @return mixed|\Shopware\Core\Framework\DataAbstractionLayer\Search\TElement|null
      */
-    public function setPoints(EntityRepository $entityRepository, Context $context, $points, $entityId, $entity, $fieldKey = 'points' ) {
-        $entityRepository->update(
-            [
-                [
-                    'id' => $entityId,
-                    'customFields' => [
-                        'loyalty_'.$entity.'_'.$fieldKey => $points,
-                    ]
-                ]
-            ],
-            $context
-        );
-    }
+    public function getRedemptionByOrder(EntityRepository $entityRepository, Context $context, $orderId) {
+        // find entities
+        $criteria = new Criteria();
+        $criteria->addFilter(new EqualsAnyFilter('orderId', [$orderId]));
 
-    /**
-     * @param CustomerEntity $customerRepository
-     * @param Context $context
-     * @return int
-     */
-    public function getPointsByCustomer(CustomerEntity $customerRepository, Context $context ) {
-        return $customerRepository->getCustomFields()['loyalty_customer_points'] ? (int)$customerRepository->getCustomFields()['loyalty_customer_points'] : 0;
-    }
+        // result
+        $loyaltyRedemptionResult = $entityRepository->search($criteria, $context);
 
-    /**
-     * @param CustomerEntity $customerRepository
-     * @param Context $context
-     * @return int
-     */
-    public function getPointsPendingByCustomer(CustomerEntity $customerRepository, Context $context ) {
-        return isset($customerRepository->getCustomFields()['loyalty_customer_points_pending']) ? (int)$customerRepository->getCustomFields()['loyalty_customer_points_pending'] : 0;
+        if ( $loyaltyRedemptionResult->getTotal() > 0 ) {
+            return $loyaltyRedemptionResult->getElements()[array_key_first($loyaltyRedemptionResult->getElements())];
+        }
+
+        return null;
     }
 
     /**
@@ -101,10 +85,12 @@ trait PointsTrait {
             $lineItemPayload = $lineItem->getPayload();
             $lineItemQuantity = $lineItem->getQuantity();
 
-            if ( $lineItemPayload['customFields']['loyalty_product_points'] ) {
-                $orderPointsAdd = (int)$lineItemPayload['customFields']['loyalty_product_points'];
+            if ( isset($lineItemPayload['customFields']['loyalty_product_points']) ) {
+                if ( $lineItemPayload['customFields']['loyalty_product_points'] ) {
+                    $orderPointsAdd = (int)$lineItemPayload['customFields']['loyalty_product_points'];
 
-                $orderPoints = $orderPoints + ($lineItemQuantity * $orderPointsAdd);
+                    $orderPoints = $orderPoints + ($lineItemQuantity * $orderPointsAdd);
+                }
             }
         }
 

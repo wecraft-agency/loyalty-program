@@ -37,11 +37,11 @@ Component.extend('loyalty-reward-create', 'loyalty-reward-detail', {
         onClickSave() {
             this.isLoading = true;
 
-            const titleSaveError = 'ERROR';
-            const messageSaveError = 'ERROR MESSAGE';
+            const titleSaveError = this.$tc('loyalty-program.rewards.general.savedErrorTitle');
+            const messageSaveError = this.$tc('loyalty-program.rewards.general.savedErrorMessage');
 
-            const titleSaveSuccess = 'SUCCESS';
-            const messageSaveSuccess = 'SUCCESS MESSAGE';
+            const titleSaveSuccess = this.$tc('loyalty-program.rewards.general.savedSuccessTitle');
+            const messageSaveSuccess = this.$tc('loyalty-program.rewards.general.savedSuccessMessage');
 
             this.repository
                 .save(this.item, Shopware.Context.api)

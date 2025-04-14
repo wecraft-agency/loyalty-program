@@ -141,6 +141,7 @@
                                         <sw-single-select v-model:value="item.discountMethod"
                                                   show-clearable-button
                                                   :options="discountMethodOptions"
+                                                  @update:value="onDiscountTypeChange"
                                                   class="loyalty-reward-detail__item_discount_method"
                                                   :label="$tc('loyalty-program.rewards.detail.fieldTitleLabelDiscountMethod')"
                                                   :helpText="$tc('loyalty-program.rewards.detail.fieldTitleHelpTextDiscountMethod')"
@@ -150,6 +151,7 @@
 
                                 {% block loyalty_reward_detail_content_discount_percentage %}
                                         <sw-number-field v-model:value="item.discountPercentage"
+                                                         v-if="item.discountMethod === 'percentage'"
                                                          required
                                                          class="loyalty-reward-detail__item_discount_percentage"
                                                          numberType="int"
@@ -163,6 +165,7 @@
 
                                 {% block loyalty_reward_detail_content_discount_fixed %}
                                         <sw-number-field v-model:value="item.discountFixed"
+                                                         v-if="item.discountMethod === 'fixed'"
                                                          required
                                                          class="loyalty-reward-detail__item_discount_fixed"
                                                          numberType="int"

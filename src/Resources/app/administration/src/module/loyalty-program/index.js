@@ -1,6 +1,10 @@
+// rewards
 import './page/loyalty-reward-list';
 import './page/loyalty-reward-detail';
 import './page/loyalty-reward-create';
+
+// redemptions
+import './page/loyalty-redemption-list';
 
 import enGB from  "./snippet/en-GB.json";
 import deDE from "./snippet/de-DE.json";
@@ -36,6 +40,10 @@ Shopware.Module.register('loyalty-program', {
             meta: {
                 parentPath: 'loyalty.program.rewards.index'
             }
+        },
+        "redemptions.index": {
+            component: 'loyalty-redemption-list',
+            path: 'redemption/index'
         }
     },
 
@@ -58,7 +66,7 @@ Shopware.Module.register('loyalty-program', {
             id: 'loyalty-redemptions',
             parent: 'loyalty-program',
             label: 'loyalty-program.general.redemptionsLabel',
-            path: 'sw.extension.store',
+            path: 'loyalty.program.redemptions.index',
             position: 10,
         },
         {

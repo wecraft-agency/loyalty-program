@@ -56,5 +56,8 @@
     </sw-card>
     <sw-card :title="$tc('loyalty-customer.cardRedemptionsTitle')">
         POINTS REDEMPTIONS HISTORY
+        {% for key, redemption in customer.extensions.loyaltyRedemptions %}
+            {{ redeption.points }}
+        {% endfor %}
     </sw-card>
 {% endblock %}

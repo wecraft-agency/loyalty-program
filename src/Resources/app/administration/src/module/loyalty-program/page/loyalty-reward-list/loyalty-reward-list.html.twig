@@ -49,6 +49,31 @@
                                            :isLoading="isLoading"
                                            :columns="columns">
 
+                            <template #column-discountMethod="{ item }">
+                                <sw-label
+                                        appearance="pill"
+                                >
+                                    {{ item.discountMethod }}
+                                </sw-label>
+                            </template>
+
+                            <template #column-type="{ item }">
+                                <sw-label
+                                        v-if="item.type === 'product'"
+                                        variant="info"
+                                        appearance="pill"
+                                >
+                                    {{ item.type }}
+                                </sw-label>
+                                <sw-label
+                                        v-else
+                                        variant="warning"
+                                        appearance="pill"
+                                >
+                                    {{ item.type }}
+                                </sw-label>
+                            </template>
+
                             <template #pagination>
                                 {% block sw_order_list_grid_pagination %}
                                     <sw-pagination :page="page"

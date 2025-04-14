@@ -9,6 +9,14 @@
       "campaignsLabel": "Campaigns",
       "ranksLabel": "Ranks"
     },
+    "redemptions": {
+      "list": {
+        "typeLabel": "Type",
+        "statusLabel": "Status",
+        "dateLabel": "Date",
+        "pointsLabel": "Points"
+      }
+    },
     "rewards": {
       "general": {
         "create": "Add reward",
@@ -17,12 +25,17 @@
         "fieldTitleLabelName": "Name",
         "fieldTitlePlaceholderName": "Name",
         "settingsLabel": "Settings",
-        "discountLabel": "Discount"
+        "discountLabel": "Discount",
+        "savedSuccessTitle": "Reward saved",
+        "savedSuccessMessage": "Reward was saved successfull",
+        "savedErrorTitle": "Error",
+        "savedErrorMessage": "Error while saving reward"
       },
       "list": {
         "contentEmpty": "No rewards found.",
         "nameLabel": "Name",
         "typeLabel": "Type",
+        "discountMethodLabel": "Discount method",
         "active": "Active",
         "pointsLabel": "Points"
       },
