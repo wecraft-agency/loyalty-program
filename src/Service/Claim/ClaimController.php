@@ -7,6 +7,7 @@ use LoyaltyProgram\Service\LineItemHandler;
 use Shopware\Core\Checkout\Cart\LineItem\LineItem;
 use Shopware\Core\Checkout\Cart\LineItemFactoryRegistry;
 use Shopware\Core\Checkout\Cart\SalesChannel\CartService;
+use Shopware\Core\Checkout\Customer\CustomerEntity;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
@@ -40,8 +41,8 @@ class ClaimController extends StorefrontController
         $this->loyaltyRewardRepository = $loyaltyRewardRepository;
     }
 
-    #[Route(path: '/loyalty-claim/product', name: 'frontend.checkout.loyalty-item.add', methods: ['POST'])]
-    public function add(Cart $cart, SalesChannelContext $context): Response
+    #[Route(path: '/loyalty-claim/product', name: 'frontend.checkout.loyalty-item.add', defaults: ['_loginRequired' => true],  methods: ['POST'])]
+    public function add(Cart $cart, SalesChannelContext $context, CustomerEntity $customer): Response
     {
         if ( $_POST['type'] === LineItemHandler::TYPE ) {
             // get reward by repository
@@ -49,18 +50,33 @@ class ClaimController extends StorefrontController
             $criteria->addFilter(new EqualsFilter('id', $_POST['id']));
 
             $loyaltyRewardResult = $this->loyaltyRewardRepository->search($criteria, Context::createDefaultContext());
+            $lineItemPoints = ($loyaltyRewardResult->getTotal() > 0) ? $loyaltyRewardResult->getElements()[$_POST['id']]->getPoints() : 0;
 
-            $lineItemPoints = 0;
+            // get full cart
+            $cartPointsSpent = $lineItemPoints;
 
-            if ( $loyaltyRewardResult->getTotal() > 0 ) {
-                $lineItemPoints = $loyaltyRewardResult->getElements()[$_POST['id']]->getPoints();
+            if ( count($cart->getLineItems()->getElements()) > 0 ) {
+                foreach ( $cart->getLineItems()->getElements() as $lineItem ) {
+                    if ( $lineItem->getType() === LineItemHandler::TYPE ) {
+                        $quantity = $lineItem->getQuantity();
+                        $points = $lineItem->getPayload()['points'];
+
+                        $cartPointsSpent = $cartPointsSpent + ($quantity * $points);
+                    }
+                }
             }
 
+            // get customer points
+            $customerPoints = $customer->getExtensions()['loyaltyCustomer']->getPoints();
+
+            if ( $customerPoints < $cartPointsSpent ) {
+                return $this->renderStorefront('@Storefront/storefront/base.html.twig');
+            }
 
             // Create product line item
             $lineItem = new LineItem($_POST['id'], LineItemHandler::TYPE, null, 1);
             $lineItem->setStackable(true);
-            $lineItem->setRemovable(false);
+            $lineItem->setRemovable(true);
             $lineItem->setLabel($_POST['name']);
 
             // Set a zero price for the line item

@@ -1,0 +1,10 @@
+.loyalty-rewards-grid {
+  margin-left: -(.375rem);
+  margin-right: -(.375rem);
+  row-gap: (.375rem * 2);
+
+  > div {
+    padding-left: .375rem;
+    padding-right: .375rem;
+  }
+}

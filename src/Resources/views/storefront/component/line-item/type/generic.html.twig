@@ -1,6 +1,11 @@
 {% sw_extends '@Storefront/storefront/component/line-item/type/generic.html.twig' %}
 
 {% block component_line_item_type_generic_details %}
+    {% if lineItem.type !== 'reward-product' %}
+        {% block component_line_item_type_generic_delivery_date %}
+        {% endblock %}
+    {% endif %}
+
     {{ parent() }}
 {% endblock %}
 
