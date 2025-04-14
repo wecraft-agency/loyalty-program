@@ -1,0 +1,28 @@
+{% sw_extends '@Storefront/storefront/component/line-item/type/generic.html.twig' %}
+
+{% block component_line_item_type_generic_details %}
+    {{ parent() }}
+    {{ dump(lineItem) }}
+{% endblock %}
+
+{% block component_line_item_type_generic_col_tax_price %}
+    {% if lineItem.type !== 'reward-product' %}
+        {{ parent() }}
+    {% endif %}
+{% endblock %}
+
+{% block component_line_item_type_generic_col_unit_price %}
+    {% if lineItem.type !== 'reward-product' %}
+        {{ parent() }}
+    {% endif %}
+{% endblock %}
+
+{% block component_line_item_type_generic_col_total_price %}
+    {% if lineItem.type !== 'reward-product' %}
+        {{ parent() }}
+    {% else %}
+        <div class="line-item-total-price">
+            POINTS HAHA
+        </div>
+    {% endif %}
+{% endblock %}

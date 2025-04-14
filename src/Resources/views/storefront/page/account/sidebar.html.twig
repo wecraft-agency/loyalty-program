@@ -2,61 +2,64 @@
 
 {% block page_account_sidebar_menu %}
     {% block page_account_sidebar_loyalty_menu_loyalty %}
-        <div class="account-loyalty-nav border-1 mb-3 mt-3" style="border-style: solid;">
-            <div class="account-loyalty-nav-header">
-                {% if context.customer and not context.customer.guest %}
-                    {% set loyaltyPoints = 0 %}
-                    {% set loyaltyPointsPending = 0 %}
+        {% if headerWidget == null %}
+
+            <div class="account-loyalty-nav border-1 mb-3 mt-3" style="border-style: solid;">
+                <div class="account-loyalty-nav-header">
+                    {% if context.customer and not context.customer.guest %}
+                        {% set loyaltyPoints = 0 %}
+                        {% set loyaltyPointsPending = 0 %}
 
 
-                    {% if context.customer.extensions.loyaltyCustomer.points %}
-                        {% set loyaltyPoints = context.customer.extensions.loyaltyCustomer.points %}
-                    {% endif %}
-
-                    {% if context.customer.extensions.loyaltyCustomer.pointsPending %}
-                        {% set loyaltyPointsPending = context.customer.extensions.loyaltyCustomer.pointsPending %}
-                    {% endif %}
-
-                    <div style="background: blue; color: white; padding: 1rem;">
-                        {{ "loyaltyProgram.global.points"|trans|sw_sanitize }}: <strong>{{ loyaltyPoints }}</strong>
-
-                        {% if loyaltyPointsPending > 0 %}
-                            ({{ loyaltyPointsPending }} {{ "loyaltyProgram.global.pending"|trans|sw_sanitize }})
+                        {% if context.customer.extensions.loyaltyCustomer.points %}
+                            {% set loyaltyPoints = context.customer.extensions.loyaltyCustomer.points %}
                         {% endif %}
-                    </div>
-                {% endif %}
+
+                        {% if context.customer.extensions.loyaltyCustomer.pointsPending %}
+                            {% set loyaltyPointsPending = context.customer.extensions.loyaltyCustomer.pointsPending %}
+                        {% endif %}
+
+                        <div style="background: blue; color: white; padding: 1rem;">
+                            {{ "loyaltyProgram.global.points"|trans|sw_sanitize }}: <strong>{{ loyaltyPoints }}</strong>
+
+                            {% if loyaltyPointsPending > 0 %}
+                                ({{ loyaltyPointsPending }} {{ "loyaltyProgram.global.pending"|trans|sw_sanitize }})
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="account-loyalty-nav-list">
+                    <nav class="list-group list-group-flush account-aside-list-group">
+                        {% block page_account_sidebar_loyalty_menu_inner %}
+                            {% block page_account_sidebar_loyalty_menu_link_rewards %}
+                                <a href="{{ path('frontend.account.loyalty.rewards') }}"
+                                   title="{{ 'loyaltyProgram.global.rewardsTitle'|trans|striptags }}"
+                                   class="list-group-item list-group-item-action account-aside-item{% if activeRoute is same as('frontend.account.loyalty.rewards') %} is-active{% endif %}"
+                                        {% if activeRoute is same as('frontend.account.loyalty.rewards') %} aria-current="page"{% endif %}>
+                                    {{ 'loyaltyProgram.global.rewardsTitle'|trans|sw_sanitize }}
+                                </a>
+                            {% endblock %}
+                            {% block page_account_sidebar_loyalty_menu_link_history %}
+                                <a href="{{ path('frontend.account.loyalty.history') }}"
+                                   title="{{ 'loyaltyProgram.global.pointsHistoryTitle'|trans|striptags }}"
+                                   class="list-group-item list-group-item-action account-aside-item{% if activeRoute is same as('frontend.account.loyalty.history') %} is-active{% endif %}"
+                                        {% if activeRoute is same as('frontend.account.loyalty.history') %} aria-current="page"{% endif %}>
+                                    {{ 'loyaltyProgram.global.pointsHistoryTitle'|trans|sw_sanitize }}
+                                </a>
+                            {% endblock %}
+                            {% block page_account_sidebar_loyalty_menu_link_ranks %}
+                                <a href="{{ path('frontend.account.loyalty.ranks') }}"
+                                   title="{{ 'loyaltyProgram.global.ranksTitle'|trans|striptags }}"
+                                   class="list-group-item list-group-item-action account-aside-item{% if activeRoute is same as('frontend.account.loyalty.ranks') %} is-active{% endif %}"
+                                        {% if activeRoute is same as('frontend.account.loyalty.ranks') %} aria-current="page"{% endif %}>
+                                    {{ 'loyaltyProgram.global.ranksTitle'|trans|sw_sanitize }}
+                                </a>
+                            {% endblock %}
+                        {% endblock %}
+                    </nav>
+                </div>
             </div>
-            <div class="account-loyalty-nav-list">
-                <nav class="list-group list-group-flush account-aside-list-group">
-                    {% block page_account_sidebar_loyalty_menu_inner %}
-                        {% block page_account_sidebar_loyalty_menu_link_rewards %}
-                            <a href="{{ path('frontend.account.loyalty.rewards') }}"
-                               title="{{ 'loyaltyProgram.global.rewardsTitle'|trans|striptags }}"
-                               class="list-group-item list-group-item-action account-aside-item{% if activeRoute is same as('frontend.account.loyalty.rewards') %} is-active{% endif %}"
-                                    {% if activeRoute is same as('frontend.account.loyalty.rewards') %} aria-current="page"{% endif %}>
-                                {{ 'loyaltyProgram.global.rewardsTitle'|trans|sw_sanitize }}
-                            </a>
-                        {% endblock %}
-                        {% block page_account_sidebar_loyalty_menu_link_history %}
-                            <a href="{{ path('frontend.account.loyalty.history') }}"
-                               title="{{ 'loyaltyProgram.global.pointsHistoryTitle'|trans|striptags }}"
-                               class="list-group-item list-group-item-action account-aside-item{% if activeRoute is same as('frontend.account.loyalty.history') %} is-active{% endif %}"
-                                    {% if activeRoute is same as('frontend.account.loyalty.history') %} aria-current="page"{% endif %}>
-                                {{ 'loyaltyProgram.global.pointsHistoryTitle'|trans|sw_sanitize }}
-                            </a>
-                        {% endblock %}
-                        {% block page_account_sidebar_loyalty_menu_link_ranks %}
-                            <a href="{{ path('frontend.account.loyalty.ranks') }}"
-                               title="{{ 'loyaltyProgram.global.ranksTitle'|trans|striptags }}"
-                               class="list-group-item list-group-item-action account-aside-item{% if activeRoute is same as('frontend.account.loyalty.ranks') %} is-active{% endif %}"
-                                    {% if activeRoute is same as('frontend.account.loyalty.ranks') %} aria-current="page"{% endif %}>
-                                {{ 'loyaltyProgram.global.ranksTitle'|trans|sw_sanitize }}
-                            </a>
-                        {% endblock %}
-                    {% endblock %}
-                </nav>
-            </div>
-        </div>
+        {% endif %}
     {% endblock %}
 
     {{ parent() }}

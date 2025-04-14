@@ -2,10 +2,13 @@
 
 namespace LoyaltyProgram\Core\Checkout\Cart;
 
+use LoyaltyProgram\Service\LineItemHandler;
+
 use Shopware\Core\Checkout\Cart\Cart;
 use Shopware\Core\Checkout\Cart\CartBehavior;
 use Shopware\Core\Checkout\Cart\CartProcessorInterface;
 use Shopware\Core\Checkout\Cart\LineItem\CartDataCollection;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 
@@ -49,7 +52,7 @@ class PointsCartProcessor implements CartProcessorInterface
         // get calculation type
         $calculationType = $this->systemConfigService->get('LoyaltyProgram.config.pointsCalculationType', $salesChannelId);
 
-
+        // calculation
         if ( $calculationType === 'price' ) {
             $pointsMultiplier = $this->systemConfigService->get('LoyaltyProgram.config.pointsCalculationPriceMultiplier', $salesChannelId);
             // calculate points by price
@@ -60,5 +63,12 @@ class PointsCartProcessor implements CartProcessorInterface
         }
 
         $data->set('loyalty_points_total', $points);
+
+        // add lineitems
+        $lineItems = $original->getLineItems()->filterFlatByType(LineItemHandler::TYPE);
+
+        foreach ($lineItems as $lineItem){
+            $cart->add($lineItem);
+        }
     }
 }

@@ -72,6 +72,7 @@
         <service id="LoyaltyProgram\Service\Claim\ClaimController">
             <argument type="service" id="Shopware\Core\Checkout\Cart\LineItemFactoryRegistry"/>
             <argument type="service" id="Shopware\Core\Checkout\Cart\SalesChannel\CartService"/>
+            <argument type="service" id="loyalty_reward.repository" />
 
             <call method="setContainer">
                 <argument type="service" id="service_container"/>

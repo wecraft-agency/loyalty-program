@@ -16,6 +16,8 @@ class RewardEntity extends Entity
 
     protected ?string $type;
 
+    protected int $points;
+
     protected ?string $discountMethod;
 
     protected ?int $discountPercentage;
@@ -62,6 +64,16 @@ class RewardEntity extends Entity
     public function setType(?string $type): void
     {
         $this->type = $type;
+    }
+
+    public function getPoints(): ?int
+    {
+        return $this->points;
+    }
+
+    public function setPoints(?int $points): void
+    {
+        $this->points = $points;
     }
 
     public function getDiscountMethod(): ?string

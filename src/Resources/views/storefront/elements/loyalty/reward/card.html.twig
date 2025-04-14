@@ -87,13 +87,10 @@
                                             <form action="/loyalty-claim/product" method="post" class="claim-widget" data-add-to-card="true">
                                                 <input type="hidden" name="redirectTo" value="frontend.cart.offcanvas" />
                                                 <input type="hidden" name="redirectParameters" value='{"productId": "{{ item.id }}"}' />
-                                                <input type="hidden" name="lineItems[{{ item.id }}][id]" value="{{ item.id }}" />
-                                                <input type="hidden" name="lineItems[{{ item.id }}][type]" value="reward-product" />
-                                                <input type="hidden" name="lineItems[{{ item.id }}][stackable]" value="0" />
-                                                <input type="hidden" name="lineItems[{{ item.id }}][removable]" value="0" />
-                                                <input type="hidden" name="lineItems[{{ item.id }}][quantity]" value="1" />
+                                                <input type="hidden" name="id" value="{{ item.id }}" />
+                                                <input type="hidden" name="type" value="reward-product" />
 
-                                                <input type="hidden" name="product-name" value="{{ item.translated.name }}" />
+                                                <input type="hidden" name="name" value="{{ item.translated.name }}" />
 
                                                 <button class="btn btn-primary btn-block w-100">
                                                     {{ 'loyaltyProgram.global.claimReward'|trans|sw_sanitize }}
