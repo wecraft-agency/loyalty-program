@@ -198,7 +198,8 @@ class CheckoutOrderPlacedSubscriber implements EventSubscriberInterface
             [
                 [
                     'id' => $loyaltyCustomer->getId(),
-                    'points' => ((int)($loyaltyCustomer->getPointsPending() + (int)$orderPoints) - $spentPoints),
+                    'points' => (int)$loyaltyCustomer->getPoints() - (int)$spentPoints,
+                    'pointsPending' => (int)$loyaltyCustomer->getPointsPending() + (int)$orderPoints
                 ]
             ],
             Context::createDefaultContext()
