@@ -12,9 +12,16 @@
                     <div class="loyalty-redemption p-4 bg-light">
                         <div class="d-flex flex-row flex-wrap column-gap-3 row-gap-2 align-items-center">
                             <div class="loyalty-redemption-inner-column">
-                                <div class="badge py-1 px-2 bg-primary">
-                                    {{ redemption.type }}
-                                </div>
+
+                                {% if redemption.type === 'awarded' %}
+                                    <div class="badge py-1 px-2 bg-primary">
+                                        {{ redemption.type }}
+                                    </div>
+                                {% else %}
+                                    <div class="badge py-1 px-2 bg-danger">
+                                        {{ redemption.type }}
+                                    </div>
+                                {% endif %}
                             </div>
                             <div class="loyalty-redemption-inner-column">
 

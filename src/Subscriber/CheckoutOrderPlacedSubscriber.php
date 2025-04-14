@@ -2,6 +2,7 @@
 
 namespace LoyaltyProgram\Subscriber;
 
+use LoyaltyProgram\Service\LineItemHandler;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Checkout\Cart\Event\CheckoutOrderPlacedEvent;
@@ -132,44 +133,72 @@ class CheckoutOrderPlacedSubscriber implements EventSubscriberInterface
             $orderPoints = $this->getPointsByLineItemPoints($order, $event->getContext());
         }
 
-        // return if orderPoints equals 0
-        if ( $orderPoints === 0 ) {
-            return;
+
+        // create entry if points spent
+        $spentPoints = 0;
+
+        foreach ( $event->getOrder()->getLineItems()->getElements() as $lineItem) {
+            if ( $lineItem->getType() === LineItemHandler::TYPE ) {
+                $quantity = $lineItem->getQuantity();
+                $points = $lineItem->getPayload()['points'];
+
+                $spentPoints = $spentPoints + ($quantity * $points);
+            }
         }
 
-        // create redemption
-        $this->loyaltyRedemptionRepository->create(
-            [
+        if ( $spentPoints > 0 ) {
+            // create redemption
+            $this->loyaltyRedemptionRepository->create(
                 [
-                    'id' => Uuid::randomHex(),
-                    'orderId' => $orderId,
-                    'customerId' => $customerId,
-                    'points' => (int)$orderPoints,
-                    'type' => 'awarded',
-                    'status' => 'pending'
-                ]
-            ],
-            Context::createDefaultContext()
-        );
+                    [
+                        'id' => Uuid::randomHex(),
+                        'orderId' => $orderId,
+                        'customerId' => $customerId,
+                        'points' => (int)$spentPoints,
+                        'type' => 'spent',
+                        'status' => 'finished'
+                    ]
+                ],
+                Context::createDefaultContext()
+            );
+        }
 
-        // write data to order
-        $this->loyaltyOrderRepository->create(
-            [
+        // return if orderPoints equals 0
+        if ( $orderPoints > 0 ) {
+            // create redemption
+            $this->loyaltyRedemptionRepository->create(
                 [
-                    'id' => Uuid::randomHex(),
-                    'orderId' => $orderId,
-                    'points' => (int)$orderPoints,
-                ]
-            ],
-            Context::createDefaultContext()
-        );
+                    [
+                        'id' => Uuid::randomHex(),
+                        'orderId' => $orderId,
+                        'customerId' => $customerId,
+                        'points' => (int)$orderPoints,
+                        'type' => 'awarded',
+                        'status' => 'pending'
+                    ]
+                ],
+                Context::createDefaultContext()
+            );
+
+            // write data to order
+            $this->loyaltyOrderRepository->create(
+                [
+                    [
+                        'id' => Uuid::randomHex(),
+                        'orderId' => $orderId,
+                        'points' => (int)$orderPoints,
+                    ]
+                ],
+                Context::createDefaultContext()
+            );
+        }
 
         // update pending points
         $this->loyaltyCustomerRepository->update(
             [
                 [
                     'id' => $loyaltyCustomer->getId(),
-                    'pointsPending' => (int)($loyaltyCustomer->getPointsPending() + (int)$orderPoints),
+                    'points' => ((int)($loyaltyCustomer->getPointsPending() + (int)$orderPoints) - $spentPoints),
                 ]
             ],
             Context::createDefaultContext()
