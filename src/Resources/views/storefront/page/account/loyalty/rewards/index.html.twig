@@ -1,0 +1,30 @@
+{% sw_extends '@Storefront/storefront/page/account/index.html.twig' %}
+
+{% block page_account_main_content %}
+    {% block page_account_loyalty_rewards_title %}
+        <h1>{{ "loyaltyProgram.global.rewardsTitle"|trans|sw_sanitize }}</h1>
+    {% endblock %}
+
+    {% block page_account_loyalty_rewards %}
+        {% if rewards|length > 0 %}
+            <div class="loyalty-rewards-grid row">
+                {% for reward in rewards %}
+                    <div class="col-12 col-sm-6 col-md-4">
+
+                        {% sw_include '@Storefront/storefront/elements/loyalty/reward/card.html.twig' with {
+                            item: reward,
+                            currency: context.currency
+                        } %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                {% sw_include '@Storefront/storefront/utilities/alert.html.twig' with {
+                    type: 'info',
+                    content: "loyaltyProgram.global.noRewardsFound"|trans|sw_sanitize
+                } %}
+            </div>
+        {% endif %}
+    {% endblock %}
+{% endblock %}

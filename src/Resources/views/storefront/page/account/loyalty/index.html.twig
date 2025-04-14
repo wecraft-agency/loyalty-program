@@ -1,0 +1,8 @@
+{% sw_extends '@Storefront/storefront/page/account/index.html.twig' %}
+
+{% block page_account_main_content %}
+    {% block page_account_loyalty_overiew_title %}
+        <h1>{{ "loyaltyProgram.global.loyaltyTitle"|trans|sw_sanitize }}</h1>
+    {% endblock %}
+    {{ dump() }}
+{% endblock %}

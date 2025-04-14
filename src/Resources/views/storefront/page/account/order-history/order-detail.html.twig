@@ -1,5 +1,13 @@
 {% sw_extends '@Storefront/storefront/page/account/order-history/order-detail.html.twig' %}
 
 {% block page_account_order_item_detail_date %}
+    {% if order.extensions.loyaltyOrder and order.extensions.loyaltyOrder.points > 0 %}
+        <dt class="col-6 col-md-5">
+            {{ "loyaltyProgram.global.points"|trans|sw_sanitize }}
+        </dt>
+        <dd class="col-6 col-md-7 order-item-detail-labels-value">
+            {{ order.extensions.loyaltyOrder.points }}
+        </dd>
+    {% endif %}
     {{ parent() }}
 {% endblock %}
