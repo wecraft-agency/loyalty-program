@@ -136,7 +136,7 @@ class CheckoutOrderPlacedSubscriber implements EventSubscriberInterface
                 [
                     'id' => Uuid::randomHex(),
                     'orderId' => $orderId,
-                    'points' => $orderPoints,
+                    'points' => (int)$orderPoints,
                 ]
             ],
             Context::createDefaultContext()
@@ -147,7 +147,7 @@ class CheckoutOrderPlacedSubscriber implements EventSubscriberInterface
             [
                 [
                     'id' => $loyaltyCustomer->getId(),
-                    'pointsPending' => $loyaltyCustomer->getPointsPending() + (int)$orderPoints,
+                    'pointsPending' => (int)($loyaltyCustomer->getPointsPending() + (int)$orderPoints),
                 ]
             ],
             Context::createDefaultContext()
