@@ -51,6 +51,7 @@
 
                             <template #column-discountMethod="{ item }">
                                 <sw-label
+                                        v-if="item.type === 'discount'"
                                         appearance="pill"
                                 >
                                     {{ item.discountMethod }}
