@@ -69,7 +69,22 @@
             </call>
         </service>
 
+        <service id="LoyaltyProgram\Service\Claim\ClaimController">
+            <argument type="service" id="Shopware\Core\Checkout\Cart\LineItemFactoryRegistry"/>
+            <argument type="service" id="Shopware\Core\Checkout\Cart\SalesChannel\CartService"/>
+
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+
+            <tag name="controller.service_arguments"/>
+        </service>
+
         <!-- Services -->
+        <service id="LoyaltyProgram\Service\LineItemHandler">
+            <tag name="shopware.cart.line_item.factory" />
+        </service>
+
         <service id="LoyaltyProgram\Service\Order\ListenToOrderChanges">
             <argument type="service" id="request_stack" />
             <argument type="service" id="order.repository" />
