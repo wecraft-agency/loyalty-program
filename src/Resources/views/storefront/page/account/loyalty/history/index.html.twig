@@ -5,5 +5,53 @@
         <h1>{{ "loyaltyProgram.global.pointsHistoryTitle"|trans|sw_sanitize }}</h1>
     {% endblock %}
 
-    {{ dump() }}
+    {% block page_account_loyalty_history_list %}
+        {% if redemptions|length > 0 %}
+            <div class="loyalty-redemptions d-flex flex-column row-gap-1">
+                {% for redemption in redemptions %}
+                    <div class="loyalty-redemption p-4 bg-light">
+                        <div class="d-flex flex-row flex-wrap column-gap-3 row-gap-2 align-items-center">
+                            <div class="loyalty-redemption-inner-column">
+                                <div class="badge py-1 px-2 bg-primary">
+                                    {{ redemption.type }}
+                                </div>
+                            </div>
+                            <div class="loyalty-redemption-inner-column">
+
+                                {% if redemption.status === 'finished' %}
+                                    <div class="badge py-1 px-2 bg-success">
+                                        {{ redemption.status }}
+                                    </div>
+                                {% elseif redemption.status === 'pending' %}
+                                    <div class="badge py-1 px-2 bg-warning">
+                                        {{ redemption.status }}
+                                    </div>
+                                {% else %}
+                                    <div class="badge py-1 px-2 bg-danger">
+                                        {{ redemption.status }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="loyalty-redemption-inner-column">
+                                {% if redemption.type === 'awarded' %}
+                                    + {{ redemption.points }} {{ "loyaltyProgram.global.points"|trans|sw_sanitize }}
+                                {% else %}
+                                    - {{ redemption.points }} {{ "loyaltyProgram.global.points"|trans|sw_sanitize }}
+                                {% endif %}
+                            </div>
+
+                            <div class="loyalty-redemption-inner-column ms-auto me-0">
+                                {{ redemption.createdAt|format_datetime(locale: 'de') }}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            {% sw_include '@Storefront/storefront/utilities/alert.html.twig' with {
+                type: 'info',
+                content: "loyaltyProgram.global.noHistoryFound"|trans|sw_sanitize
+            } %}
+        {% endif %}
+    {% endblock %}
 {% endblock %}

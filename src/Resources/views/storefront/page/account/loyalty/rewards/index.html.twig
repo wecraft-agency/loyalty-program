@@ -19,12 +19,10 @@
                 {% endfor %}
             </div>
         {% else %}
-            <div class="alert alert-info">
-                {% sw_include '@Storefront/storefront/utilities/alert.html.twig' with {
-                    type: 'info',
-                    content: "loyaltyProgram.global.noRewardsFound"|trans|sw_sanitize
-                } %}
-            </div>
+            {% sw_include '@Storefront/storefront/utilities/alert.html.twig' with {
+                type: 'info',
+                content: "loyaltyProgram.global.noRewardsFound"|trans|sw_sanitize
+            } %}
         {% endif %}
     {% endblock %}
 {% endblock %}

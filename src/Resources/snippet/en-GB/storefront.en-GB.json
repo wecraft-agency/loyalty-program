@@ -11,6 +11,7 @@
       "ranksSingularTitle": "Rank",
       "pointsHistoryTitle": "Points history",
       "noRewardsFound": "No rewards founds.",
+      "noHistoryFound": "No points gained yet. Place your first order to earn points.",
       "saveSuffix": "on your next order",
       "savePrefix": "Save",
       "pointsLeft": "%points% points left",

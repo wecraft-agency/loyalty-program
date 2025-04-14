@@ -34,34 +34,6 @@ class AccountController extends StorefrontController {
     ) {
     }
 
-    #[Route(path: '/account/loyalty', name: 'frontend.account.loyalty.index', defaults: ['_loginRequired' => true, '_noStore' => true], methods: ['GET'])]
-    public function loyaltyIndex(Request $request, SalesChannelContext $context, CustomerEntity $customer): Response
-    {
-        $page = $this->overviewPageLoader->load($request, $context, $customer);
-        $this->hook(new AccountOverviewPageLoadedHook($page, $context));
-
-        // set customer static data
-        $customerId = $customer->getId();
-
-        // get redemptions
-        $criteria = new Criteria();
-        $criteria->addFilter(new EqualsAnyFilter('customerId', [$customerId]));
-        $criteria->addSorting(new FieldSorting('createdAt', FieldSorting::DESCENDING));
-
-        $criteria->addAssociation('order');
-
-        // result
-        $loyaltyRedemptionResult = $this->loyaltyRedemptionRepository->search($criteria, Context::createDefaultContext());
-
-        // store items
-        $redemptions = ($loyaltyRedemptionResult->getTotal() > 0) ? $loyaltyRedemptionResult->getElements() : null;
-
-        return $this->renderStorefront('@LoyaltyProgram/storefront/page/account/loyalty/index.html.twig', [
-            'page' => $page,
-            'redemptions' => $redemptions
-        ]);
-    }
-
     #[Route(path: '/account/loyalty/history', name: 'frontend.account.loyalty.history', defaults: ['_loginRequired' => true, '_noStore' => true], methods: ['GET'])]
     public function loyaltyHistory(Request $request, SalesChannelContext $context, CustomerEntity $customer): Response
     {
