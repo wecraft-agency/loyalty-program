@@ -2,7 +2,6 @@
 
 {% block component_line_item_type_generic_details %}
     {{ parent() }}
-    {{ dump(lineItem) }}
 {% endblock %}
 
 {% block component_line_item_type_generic_col_tax_price %}
@@ -22,7 +21,7 @@
         {{ parent() }}
     {% else %}
         <div class="line-item-total-price">
-            POINTS
+            {{ lineItem.payload.points }} {{ "loyaltyProgram.global.points"|trans|sw_sanitize }}
         </div>
     {% endif %}
 {% endblock %}
