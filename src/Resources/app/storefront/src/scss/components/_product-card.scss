@@ -1,0 +1,11 @@
+.card.product-box {
+  position: relative;
+
+  .loyalty-points-display {
+    position:absolute;
+    z-index: 2;
+
+    top: $spacer;
+    left: $spacer;
+  }
+}

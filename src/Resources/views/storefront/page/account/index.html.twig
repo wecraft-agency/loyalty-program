@@ -1,29 +1,5 @@
 {% sw_extends '@Storefront/storefront/page/account/index.html.twig' %}
 
-
-
 {% block page_account_overview %}
-    {% block page_account_overview_loyalty %}
-        <div class="account-overview-loyalty">
-            {% set loyaltyPoints = 0 %}
-            {% set loyaltyPointsPending = 0 %}
-
-            {% if context.customer.extensions.loyaltyCustomer.points %}
-                {% set loyaltyPoints = context.customer.extensions.loyaltyCustomer.points %}
-            {% endif %}
-
-            {% if context.customer.extensions.loyaltyCustomer.pointsPending %}
-                {% set loyaltyPointsPending = context.customer.extensions.loyaltyCustomer.pointsPending %}
-            {% endif %}
-
-            <div style="background: blue; color: white; padding: 1rem;">
-                {{ "loyaltyProgram.global.points"|trans|sw_sanitize }}: <strong>{{ loyaltyPoints }}</strong>
-                {% if loyaltyPointsPending > 0 %}
-                    ({{ loyaltyPointsPending }} {{ "loyaltyProgram.global.pending"|trans|sw_sanitize }})
-                {% endif %}
-            </div>
-        </div>
-    {% endblock %}
-
     {{ parent() }}
 {% endblock %}

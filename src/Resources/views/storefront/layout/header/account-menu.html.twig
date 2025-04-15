@@ -15,13 +15,7 @@
                 {% set loyaltyPointsPending = context.customer.extensions.loyaltyCustomer.pointsPending %}
             {% endif %}
 
-            <div style="background: blue; color: white; padding: 1rem;">
-                {{ "loyaltyProgram.global.points"|trans|sw_sanitize }}: <strong>{{ loyaltyPoints }}</strong>
-
-                {% if loyaltyPointsPending > 0 %}
-                    ({{ loyaltyPointsPending }} {{ "loyaltyProgram.global.pending"|trans|sw_sanitize }})
-                {% endif %}
-            </div>
+            {% sw_include '@LoyaltyProgram/storefront/utilities/points.html.twig' with { points: loyaltyPoints, pointsPending: loyaltyPointsPending } %}
         {% endif %}
     {% endblock %}
 

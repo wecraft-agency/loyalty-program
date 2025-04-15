@@ -16,9 +16,7 @@
         {% endif %}
 
         {% if loyaltyPoints %}
-            <div style="background: blue; color: white; padding: 1rem;">
-                {{ "loyaltyProgram.global.points"|trans|sw_sanitize }}: <strong>{{ loyaltyPoints }}</strong>
-            </div>
+            {% sw_include '@LoyaltyProgram/storefront/utilities/points.html.twig' with { points: loyaltyPoints } %}
         {% endif %}
     {% endblock %}
     {{ parent() }}

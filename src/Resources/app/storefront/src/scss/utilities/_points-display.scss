@@ -1,0 +1,13 @@
+.loyalty-points-display {
+  @include border-radius($border-radius);
+  background-color: lighten($sw-color-warning, 25%);
+  color: $sw-text-color;
+  line-height: 1;
+
+  .loyalty-points-display-icon {
+    svg {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+}

@@ -1,0 +1,13 @@
+.account-menu-dropdown {
+  .loyalty-points-display {
+    background-color: lighten($sw-color-warning, 35%);
+
+    margin-top: -$spacer-sm !important;
+    margin-left: -$spacer !important;
+    margin-right: -$spacer !important;
+
+    padding: $spacer !important;
+
+    margin-bottom: $spacer-sm !important;
+  }
+}

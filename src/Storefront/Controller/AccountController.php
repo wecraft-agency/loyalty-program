@@ -46,6 +46,7 @@ class AccountController extends StorefrontController {
         // get redemptions
         $criteria = new Criteria();
         $criteria->addFilter(new EqualsAnyFilter('customerId', [$customerId]));
+        $criteria->addFilter(new EqualsAnyFilter('status', ['finished', 'pending']));
         $criteria->addSorting(new FieldSorting('createdAt', FieldSorting::DESCENDING));
 
         $criteria->addAssociation('order');
@@ -71,20 +72,20 @@ class AccountController extends StorefrontController {
         // set customer static data
         $customerId = $customer->getId();
 
-        // get redemptions
+        // get rewards
         $criteria = new Criteria();
         $criteria->addFilter(new EqualsFilter('active', true));
         $criteria->addSorting(new FieldSorting('points', FieldSorting::ASCENDING));
 
         // result
-        $loyaltyRedemptionResult = $this->loyaltyRewardRepository->search($criteria, Context::createDefaultContext());
+        $loyaltyRewardsResult = $this->loyaltyRewardRepository->search($criteria, Context::createDefaultContext());
 
         // store items
-        $redemptions = ($loyaltyRedemptionResult->getTotal() > 0) ? $loyaltyRedemptionResult->getElements() : null;
+        $rewards = ($loyaltyRewardsResult->getTotal() > 0) ? $loyaltyRewardsResult->getElements() : null;
 
         return $this->renderStorefront('@LoyaltyProgram/storefront/page/account/loyalty/rewards/index.html.twig', [
             'page' => $page,
-            'rewards' => $redemptions
+            'rewards' => $rewards
         ]);
     }
 

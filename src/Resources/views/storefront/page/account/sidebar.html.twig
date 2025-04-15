@@ -4,7 +4,7 @@
     {% block page_account_sidebar_loyalty_menu_loyalty %}
         {% if headerWidget == null %}
 
-            <div class="account-loyalty-nav border-1 mb-3 mt-3" style="border-style: solid;">
+            <div class="account-loyalty-nav border-1 mb-3 mt-3">
                 <div class="account-loyalty-nav-header">
                     {% if context.customer and not context.customer.guest %}
                         {% set loyaltyPoints = 0 %}
@@ -19,12 +19,8 @@
                             {% set loyaltyPointsPending = context.customer.extensions.loyaltyCustomer.pointsPending %}
                         {% endif %}
 
-                        <div style="background: blue; color: white; padding: 1rem;">
-                            {{ "loyaltyProgram.global.points"|trans|sw_sanitize }}: <strong>{{ loyaltyPoints }}</strong>
-
-                            {% if loyaltyPointsPending > 0 %}
-                                ({{ loyaltyPointsPending }} {{ "loyaltyProgram.global.pending"|trans|sw_sanitize }})
-                            {% endif %}
+                        <div class="account-loyalty-nav-header-inner p-3">
+                            {% sw_include '@LoyaltyProgram/storefront/utilities/points.html.twig' with { points: loyaltyPoints, pointsPending: loyaltyPointsPending } %}
                         </div>
                     {% endif %}
                 </div>

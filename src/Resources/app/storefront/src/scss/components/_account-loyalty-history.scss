@@ -1,0 +1,20 @@
+.loyalty-redemptions {
+  .loyalty-redemption{
+    border-top: $border-width solid $sw-border-color;
+    padding-top: $spacer;
+
+    .badge{
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+
+    + .loyalty-redemption{
+      margin-top: $spacer;
+    }
+
+    &:last-child {
+      padding-bottom: $spacer;
+      border-bottom: $border-width solid $sw-border-color;
+    }
+  }
+}

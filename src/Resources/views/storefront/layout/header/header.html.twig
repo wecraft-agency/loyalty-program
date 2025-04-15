@@ -1,0 +1,22 @@
+{% sw_extends '@Storefront/storefront/layout/header/header.html.twig' %}
+
+{% block layout_header_actions_account %}
+
+    {% block layout_header_actions_loalty_widget %}
+        {% if context.customer and not context.customer.guest %}
+            <div class="col-auto pe-2">
+                {% set loyaltyPoints = 0 %}
+
+                {% if context.customer.extensions.loyaltyCustomer.points %}
+                    {% set loyaltyPoints = context.customer.extensions.loyaltyCustomer.points %}
+                {% endif %}
+
+                <div class="d-flex align-items-center h-100">
+                {% sw_include '@LoyaltyProgram/storefront/utilities/points.html.twig' with { points: loyaltyPoints, label: false } %}
+                </div>
+            </div>
+        {% endif %}
+    {% endblock %}
+
+    {{ parent() }}
+{% endblock %}

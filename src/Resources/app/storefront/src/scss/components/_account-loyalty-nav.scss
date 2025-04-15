@@ -1,0 +1,15 @@
+.account-loyalty-nav {
+  border: $border-width solid $sw-border-color;
+
+  .account-loyalty-nav-header {
+    .account-loyalty-nav-header-inner {
+      background-color: lighten($sw-color-warning, 35%);
+      color: $sw-text-color;
+
+      .loyalty-points-display {
+        padding: 0 !important;
+        background-color: transparent !important;
+      }
+    }
+  }
+}
