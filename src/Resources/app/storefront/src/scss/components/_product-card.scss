@@ -1,4 +1,4 @@
-.card.product-box {
+.card.product-box:not(.reward-box) {
   position: relative;
 
   .loyalty-points-display {
@@ -7,5 +7,12 @@
 
     top: $spacer;
     left: $spacer;
+  }
+}
+
+.reward-box {
+  .loyalty-points-display {
+    background-color: transparent;
+    padding: 0 !important;
   }
 }

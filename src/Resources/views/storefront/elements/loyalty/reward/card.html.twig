@@ -1,5 +1,5 @@
 {% block loyalty_reward_card %}
-    <div class="card product-box card-box">
+    <div class="card product-box card-box reward-box">
         <div class="card-body d-flex flex-column">
             {% block reward_card_badges %}
                 <div class="product-badges">
@@ -77,7 +77,7 @@
 
                                 <div class="product-price-wrapper">
                                     <div class="product-price">
-                                        {{ item.points }} {{ "loyaltyProgram.global.points"|trans|sw_sanitize }}
+                                        {% sw_include '@LoyaltyProgram/storefront/utilities/points.html.twig' with { points: item.points } %}
                                     </div>
                                 </div>
 
