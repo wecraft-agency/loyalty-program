@@ -82,6 +82,8 @@
         </service>
 
         <service id="LoyaltyProgram\Service\Discount\DiscountController">
+            <argument type="service" id="loyalty_reward.repository" />
+
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>
