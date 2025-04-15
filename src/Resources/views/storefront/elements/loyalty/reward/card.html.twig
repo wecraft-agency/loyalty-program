@@ -84,7 +84,7 @@
                                 <div class="product-price-button-wrapper pt-3">
                                     {% if context.customer.extensions.loyaltyCustomer.points >= item.points %}
                                         {% if item.type === 'product' %}
-                                            <form action="/loyalty-claim/product" method="post" class="claim-widget" data-add-to-card="true">
+                                            <form action="/loyalty-claim/product" method="post" class="claim-widget" data-add-reward-to-cart="true">
                                                 <input type="hidden" name="redirectTo" value="frontend.cart.offcanvas" />
                                                 <input type="hidden" name="redirectParameters" value='{"productId": "{{ item.id }}"}' />
                                                 <input type="hidden" name="lineItems[{{ item.id }}][id]" value="{{ item.id }}" />
@@ -97,7 +97,7 @@
                                                 </button>
                                             </form>
                                         {% else %}
-                                            <form action="/loyalty-claim/promotion" method="post" class="claim-widget" data-add-to-card="true">
+                                            <form action="/loyalty-claim/promotion" method="post" class="claim-widget">
                                                 <input type="hidden" name="redirectTo" value="frontend.account.loyalty.rewards" />
                                                 <input type="hidden" name="lineItems[{{ item.id }}][id]" value="{{ item.id }}" />
                                                 <input type="hidden" name="lineItems[{{ item.id }}][referenceId]" value="{{ item.id }}" />
