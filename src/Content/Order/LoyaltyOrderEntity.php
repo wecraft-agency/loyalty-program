@@ -14,6 +14,8 @@ class LoyaltyOrderEntity extends Entity
 
     protected ?int $points = null;
 
+    protected ?int $pointsSpent = null;
+
     protected ?OrderEntity $order = null;
 
     public function getOrderId(): string
@@ -44,5 +46,15 @@ class LoyaltyOrderEntity extends Entity
     public function setPoints(?int $points): void
     {
         $this->points = $points;
+    }
+
+    public function getPointsSpent(): ?int
+    {
+        return $this->pointsSpent;
+    }
+
+    public function setPointsSpent(?int $pointsSpent): void
+    {
+        $this->pointsSpent = $pointsSpent;
     }
 }

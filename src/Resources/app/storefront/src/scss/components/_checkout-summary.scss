@@ -1,0 +1,30 @@
+.checkout-aside-summary-loyalty-wrapper {
+  background-color: lighten($sw-color-warning, 35%);
+
+  margin-top: $spacer;
+  margin-left: -$spacer;
+  margin-right: -$spacer;
+  margin-bottom: -$spacer;
+
+  padding: $spacer;
+
+  .checkout-aside-summary-total{
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    border-top: 0 !important;
+    padding-top: 0 !important;
+  }
+}
+
+.checkout-aside-summary-container {
+
+  .checkout-aside-summary-list:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  .checkout-aside-summary-value {
+    &.mb-0 {
+      margin-bottom: 0 !important;
+    }
+  }
+}

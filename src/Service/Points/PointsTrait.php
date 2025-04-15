@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 namespace LoyaltyProgram\Service\Points;
 
+use LoyaltyProgram\Service\LineItemHandler;
 use Shopware\Core\Checkout\Customer\CustomerEntity;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\Context;
@@ -70,6 +71,27 @@ trait PointsTrait {
         }
 
         return null;
+    }
+
+    /**
+     * @param OrderEntity|Cart $orderRepository
+     * @param Context|SalesChannelContext $context
+     * @return int
+     */
+    public function getSpentPointsByLineItems(OrderEntity|Cart $orderRepository, Context|SalesChannelContext $context) {
+        $lineItems = $orderRepository->getLineItems();
+        $orderSpentPoints = 0;
+
+        foreach ( $lineItems->getElements() as $lineItem ) {
+            if ( $lineItem->getType() === LineItemHandler::TYPE && isset($lineItem->getPayload()['points']) ) {
+                $points = $lineItem->getPayload()['points'];
+                $quantity = $lineItem->getQuantity();
+
+                $orderSpentPoints = $orderSpentPoints + ((int)$points * (int)$quantity);
+            }
+        }
+
+        return $orderSpentPoints;
     }
 
     /**

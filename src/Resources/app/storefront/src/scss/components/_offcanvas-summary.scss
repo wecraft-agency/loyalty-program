@@ -1,0 +1,19 @@
+.offcanvas-summery-loyalty{
+  padding: var(--bs-offcanvas-padding-y);
+  margin-left: calc(var(--bs-offcanvas-padding-y) * -1);
+  margin-right: calc(var(--bs-offcanvas-padding-y) * -1);
+
+  margin-top: -$spacer;
+
+  background-color: lighten($sw-color-warning, 35%);
+
+  .h4 {
+    margin-bottom: var(--bs-offcanvas-padding-y) !important;
+  }
+
+  .offcanvas-summary-list:last-child {
+    .summary-total {
+      margin-bottom: 0;
+    }
+  }
+}

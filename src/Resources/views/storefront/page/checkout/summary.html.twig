@@ -1,22 +1,65 @@
 {% sw_extends '@Storefront/storefront/page/checkout/summary.html.twig' %}
 
-{% block page_checkout_summary %}
+{% block page_checkout_summary_inner %}
     {{ parent() }}
 
     {% set orderPointsTotal = 0 %}
+    {% set orderPointsSpent = 0 %}
 
 
     {% if page.order and page.order.extensions.loyaltyOrder.points > 0 %}
         {% set orderPointsTotal = page.order.extensions.loyaltyOrder.points %}
     {% endif %}
 
+    {% if page.order and page.order.extensions.loyaltyOrder.pointsSpent > 0 %}
+        {% set orderPointsSpent = page.order.extensions.loyaltyOrder.pointsSpent %}
+    {% endif %}
+
     {% if page.cart and page.cart.data.elements.loyalty_points_total > 0 %}
         {% set orderPointsTotal = page.cart.data.elements.loyalty_points_total %}
     {% endif %}
 
-    {% if orderPointsTotal > 0 %}
-        <div style="background: blue; color: white; padding: 1rem;">
-            {{ "loyaltyProgram.global.pointsTotal"|trans|sw_sanitize }}: <strong>{{ orderPointsTotal }}</strong>
+    {% if page.cart and page.cart.data.elements.loyalty_points_spent > 0 %}
+        {% set orderPointsSpent = page.cart.data.elements.loyalty_points_spent %}
+    {% endif %}
+
+    {% if orderPointsTotal > 0 or orderPointsSpent > 0 %}
+        <div class="col-12">
+            <div class="checkout-aside-summary-loyalty-wrapper">
+                <dl class="row checkout-aside-summary-list g-0">
+                    <dd class="col-12 checkout-aside-summary-label checkout-aside-summary-total">
+                        <div class="h4">
+                            {{ "loyaltyProgram.global.loyaltyTitle"|trans }}
+                        </div>
+                    </dd>
+                    {% if  orderPointsTotal > 0 %}
+                        <dt class="col-7 checkout-aside-summary-label">
+                            <strong>
+                                {{ "loyaltyProgram.global.pointsTotal"|trans|sw_sanitize }}
+                            </strong>
+                        </dt>
+                        <dd class="col-5 checkout-aside-summary-value">
+                            <strong>
+                                {{ orderPointsTotal }} {{ "loyaltyProgram.global.points"|trans|sw_sanitize }}
+                            </strong>
+                        </dd>
+                    {% endif %}
+                    {% if  orderPointsSpent > 0 %}
+                        <dt class="col-7 checkout-aside-summary-label">
+                            <strong>
+                                {{ "loyaltyProgram.global.pointsSpent"|trans|sw_sanitize }}
+                            </strong>
+                        </dt>
+                        <dd class="col-5 checkout-aside-summary-value mb-0">
+                            <strong>
+                                {{ orderPointsSpent }} {{ "loyaltyProgram.global.points"|trans|sw_sanitize }}
+                            </strong>
+                        </dd>
+                    {% endif %}
+                </dl>
+            </div>
         </div>
+
+
     {% endif %}
 {% endblock %}

@@ -3,7 +3,8 @@
     "global": {
       "pending": "pending",
       "points": "Points",
-      "pointsTotal": "Points by order",
+      "pointsTotal": "Points awarded",
+      "pointsSpent": "Points spent",
       "rewardsTitle": "Rewards",
       "rewardsSingularTitle": "Reward",
       "loyaltyTitle": "Loyalty program",

@@ -45,6 +45,7 @@ class PointsCartProcessor implements CartProcessorInterface
     public function process(CartDataCollection $data, Cart $original, Cart $cart, SalesChannelContext $context, CartBehavior $behavior): void
     {
         $points = 0;
+        $points_spent = 0;
 
         // salesChannelId
         $salesChannelId = $context->getSalesChannelId();
@@ -62,7 +63,10 @@ class PointsCartProcessor implements CartProcessorInterface
             $points = $this->getPointsByLineItemPoints($cart, $context);
         }
 
+        $points_spent = $this->getSpentPointsByLineItems($original, $context);
+
         $data->set('loyalty_points_total', $points);
+        $data->set('loyalty_points_spent', $points_spent);
 
         // add lineitems
         $lineItems = $original->getLineItems()->filterFlatByType(LineItemHandler::TYPE);

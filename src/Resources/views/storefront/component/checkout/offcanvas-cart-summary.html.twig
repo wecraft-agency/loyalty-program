@@ -1,11 +1,50 @@
 {% sw_extends '@Storefront/storefront/component/checkout/offcanvas-cart-summary.html.twig' %}
 
-{% block component_offcanvas_summary_content %}
-    {{ parent() }}
+{% block component_offcanvas_summary_tax_info %}
+
+    {% set pointsAwarded = 0 %}
+    {% set pointsSpent = 0 %}
 
     {% if page.cart.data.elements.loyalty_points_total and page.cart.data.elements.loyalty_points_total > 0 %}
-        <div style="background: blue; color: white; padding: 1rem;">
-            {{ "loyaltyProgram.global.pointsTotal"|trans|sw_sanitize }}: <strong>{{ page.cart.data.elements.loyalty_points_total }}</strong>
+        {% set pointsAwarded = page.cart.data.elements.loyalty_points_total %}
+    {% endif %}
+
+    {% if page.cart.data.elements.loyalty_points_spent and page.cart.data.elements.loyalty_points_spent > 0 %}
+        {% set pointsSpent = page.cart.data.elements.loyalty_points_spent %}
+    {% endif %}
+
+    {% if pointsAwarded > 0 or pointsSpent > 0 %}
+        <div class="offcanvas-summary offcanvas-summery-loyalty">
+            <dl class="row offcanvas-summary-list " aria-label="{{ "loyaltyProgram.global.pointsTotal"|trans|sw_sanitize }}">
+                <dt class="col-12 summary-label summary-total">
+                    <div class="h4">
+                        {{ "loyaltyProgram.global.loyaltyTitle"|trans|sw_sanitize }}
+                    </div>
+                </dt>
+            </dl>
+            {% if pointsAwarded > 0 %}
+                <dl class="row offcanvas-summary-list" aria-label="{{ "loyaltyProgram.global.pointsTotal"|trans|sw_sanitize }}">
+                    <dt class="col-7 summary-label summary-total">
+                        {{ "loyaltyProgram.global.pointsTotal"|trans|sw_sanitize }}
+                    </dt>
+
+                    <dd class="col-5 summary-value summary-total">
+                        <strong>{{ pointsAwarded }} {{ "loyaltyProgram.global.points"|trans|sw_sanitize }}</strong>
+                    </dd>
+                </dl>
+            {% endif %}
+            {% if pointsSpent > 0 %}
+                <dl class="row offcanvas-summary-list" aria-label="{{ "loyaltyProgram.global.pointsSpent"|trans|sw_sanitize }}">
+                    <dt class="col-7 summary-label summary-total">
+                        {{ "loyaltyProgram.global.pointsSpent"|trans|sw_sanitize }}
+                    </dt>
+
+                    <dd class="col-5 summary-value summary-total">
+                        <strong>{{ pointsSpent }} {{ "loyaltyProgram.global.points"|trans|sw_sanitize }}</strong>
+                    </dd>
+                </dl>
+            {% endif %}
         </div>
     {% endif %}
+    {{ parent() }}
 {% endblock %}

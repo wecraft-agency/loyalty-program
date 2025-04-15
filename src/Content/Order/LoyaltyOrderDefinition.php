@@ -42,6 +42,7 @@ class LoyaltyOrderDefinition extends EntityDefinition
             (new VersionField())->addFlags(new ApiAware()),
             (new ReferenceVersionField(OrderDefinition::class))->addFlags(new Required()),
             new IntField('points', 'points'),
+            new IntField('points_spent', 'pointsSpent'),
             new OneToOneAssociationField('order', 'order_id', 'id', OrderDefinition::class, false)
         ]);
     }

@@ -179,18 +179,6 @@ class CheckoutOrderPlacedSubscriber implements EventSubscriberInterface
                 ],
                 Context::createDefaultContext()
             );
-
-            // write data to order
-            $this->loyaltyOrderRepository->create(
-                [
-                    [
-                        'id' => Uuid::randomHex(),
-                        'orderId' => $orderId,
-                        'points' => (int)$orderPoints,
-                    ]
-                ],
-                Context::createDefaultContext()
-            );
         }
 
         // update pending points
@@ -200,6 +188,19 @@ class CheckoutOrderPlacedSubscriber implements EventSubscriberInterface
                     'id' => $loyaltyCustomer->getId(),
                     'points' => (int)$loyaltyCustomer->getPoints() - (int)$spentPoints,
                     'pointsPending' => (int)$loyaltyCustomer->getPointsPending() + (int)$orderPoints
+                ]
+            ],
+            Context::createDefaultContext()
+        );
+
+        // write data to order
+        $this->loyaltyOrderRepository->create(
+            [
+                [
+                    'id' => Uuid::randomHex(),
+                    'orderId' => $orderId,
+                    'points' => (int)$orderPoints,
+                    'pointsSpent' => (int)$spentPoints
                 ]
             ],
             Context::createDefaultContext()
