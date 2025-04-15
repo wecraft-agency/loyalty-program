@@ -87,6 +87,7 @@
                                             <form action="/loyalty-claim/product" method="post" class="claim-widget" data-add-reward-to-cart="true">
                                                 <input type="hidden" name="redirectTo" value="frontend.cart.offcanvas" />
                                                 <input type="hidden" name="lineItems[{{ item.id }}][id]" value="{{ item.id }}" />
+                                                <input type="hidden" name="lineItems[{{ item.id }}][type]" value="reward-product" />
                                                 <input type="hidden" name="lineItems[{{ item.id }}][referenceId]" value="{{ item.id }}" />
                                                 <input type="hidden" name="lineItems[{{ item.id }}][removable]" value="1" />
                                                 <input type="hidden" name="lineItems[{{ item.id }}][quantity]" value="1" />
