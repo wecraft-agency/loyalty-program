@@ -81,6 +81,14 @@
             <tag name="controller.service_arguments"/>
         </service>
 
+        <service id="LoyaltyProgram\Service\Discount\DiscountController">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+
+            <tag name="controller.service_arguments"/>
+        </service>
+
         <!-- Services -->
         <service id="LoyaltyProgram\Service\LineItemHandler">
             <tag name="shopware.cart.line_item.factory" />

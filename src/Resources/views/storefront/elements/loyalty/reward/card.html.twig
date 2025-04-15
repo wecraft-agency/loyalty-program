@@ -86,19 +86,6 @@
                                         {% if item.type === 'product' %}
                                             <form action="/loyalty-claim/product" method="post" class="claim-widget" data-add-reward-to-cart="true">
                                                 <input type="hidden" name="redirectTo" value="frontend.cart.offcanvas" />
-                                                <input type="hidden" name="redirectParameters" value='{"productId": "{{ item.id }}"}' />
-                                                <input type="hidden" name="lineItems[{{ item.id }}][id]" value="{{ item.id }}" />
-                                                <input type="hidden" name="lineItems[{{ item.id }}][type]" value="reward-product" />
-
-                                                <input type="hidden" name="name" value="{{ item.translated.name }}" />
-
-                                                <button class="btn btn-primary btn-block w-100">
-                                                    {{ 'loyaltyProgram.global.claimReward'|trans|sw_sanitize }}
-                                                </button>
-                                            </form>
-                                        {% else %}
-                                            <form action="/loyalty-claim/promotion" method="post" class="claim-widget">
-                                                <input type="hidden" name="redirectTo" value="frontend.account.loyalty.rewards" />
                                                 <input type="hidden" name="lineItems[{{ item.id }}][id]" value="{{ item.id }}" />
                                                 <input type="hidden" name="lineItems[{{ item.id }}][referenceId]" value="{{ item.id }}" />
                                                 <input type="hidden" name="lineItems[{{ item.id }}][removable]" value="1" />
@@ -106,6 +93,14 @@
                                                 <input type="hidden" name="lineItems[{{ item.id }}][stackable]" value="1" />
 
                                                 <input type="hidden" name="product-name" value="{{ item.translated.name }}" />
+
+                                                <button class="btn btn-primary btn-block w-100">
+                                                    {{ 'loyaltyProgram.global.claimReward'|trans|sw_sanitize }}
+                                                </button>
+                                            </form>
+                                        {% else %}
+                                            <form action="/loyalty-claim/discount" method="post" class="claim-widget" data-generate-discount="true">
+                                                <input type="hidden" name="redirectTo" value="frontend.account.loyalty.rewards" />
 
                                                 <button class="btn btn-primary btn-block w-100">
                                                     {{ 'loyaltyProgram.global.claimReward'|trans|sw_sanitize }}
