@@ -6,4 +6,5 @@
 
     <import resource="../../Storefront/Controller/*Controller.php" type="attribute" />
     <import resource="../../Service/Claim/*Controller.php" type="attribute" />
+    <import resource="../../Service/Discount/*Controller.php" type="attribute" />
 </routes>
