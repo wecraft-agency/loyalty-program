@@ -29,7 +29,7 @@
                     </dt>
 
                     <dd class="col-5 summary-value summary-total">
-                        <strong>{{ pointsAwarded }} {{ "loyaltyProgram.global.points"|trans|sw_sanitize }}</strong>
+                        <strong>+ {{ pointsAwarded }} {{ "loyaltyProgram.global.points"|trans|sw_sanitize }}</strong>
                     </dd>
                 </dl>
             {% endif %}
@@ -40,7 +40,7 @@
                     </dt>
 
                     <dd class="col-5 summary-value summary-total">
-                        <strong>{{ pointsSpent }} {{ "loyaltyProgram.global.points"|trans|sw_sanitize }}</strong>
+                        <strong>- {{ pointsSpent }} {{ "loyaltyProgram.global.points"|trans|sw_sanitize }}</strong>
                     </dd>
                 </dl>
             {% endif %}

@@ -9,5 +9,13 @@
             {{ order.extensions.loyaltyOrder.points }}
         </dd>
     {% endif %}
+    {% if order.extensions.loyaltyOrder and order.extensions.loyaltyOrder.pointsSpent > 0 %}
+        <dt class="col-6 col-md-5">
+            {{ "loyaltyProgram.global.pointsSpent"|trans|sw_sanitize }}:
+        </dt>
+        <dd class="col-6 col-md-7 order-item-detail-labels-value">
+            {{ order.extensions.loyaltyOrder.pointsSpent }}
+        </dd>
+    {% endif %}
     {{ parent() }}
 {% endblock %}
