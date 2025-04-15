@@ -15,7 +15,10 @@
       "saveSuffix": "on your next order",
       "savePrefix": "Save",
       "pointsLeft": "%points% points left",
-      "claimReward": "Claim reward"
+      "claimReward": "Claim reward",
+      "addToCartSuccess": "%count% reward added to your shopping cart.",
+      "addToCartError": "Reward could not be added to your shopping cart.",
+      "addToCartPointsError": "You have not enough points to add reward to your shopping cart."
     }
   }
 }
