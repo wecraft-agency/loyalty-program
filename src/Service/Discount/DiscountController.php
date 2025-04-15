@@ -22,7 +22,7 @@ class DiscountController extends StorefrontController
         $this->loyaltyRewardRepository = $loyaltyRewardRepository;
     }
 
-    #[Route(path: '/loyalty-claim/discount', name: 'frontend.discount.loyalty-reward.add', defaults: ['_loginRequired' => true, 'XmlHttpRequest' => true],  methods: ['POST', 'GET'])]
+    #[Route(path: '/loyalty-claim/discount', name: 'frontend.discount.loyalty-reward.add', defaults: ['_loginRequired' => true, 'XmlHttpRequest' => true],  methods: ['POST'])]
     public function add(Request $request, SalesChannelContext $context, CustomerEntity $customer): Response
     {
 
