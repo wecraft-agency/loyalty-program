@@ -31,7 +31,7 @@ trait PointsTrait {
         $loyaltyCustomerResult = $entityRepository->search($criteria, $context);
 
         if ( $loyaltyCustomerResult->getTotal() > 0 ) {
-            return $loyaltyCustomerResult->getElements()[array_key_first($loyaltyCustomerResult->getElements())];
+            return $loyaltyCustomerResult->first();
         }
 
         // create customer
@@ -47,7 +47,7 @@ trait PointsTrait {
         $criteria->addFilter(new EqualsAnyFilter('customerId', [$customerId]));
         $loyaltyCustomerResult = $entityRepository->search($criteria, $context);
 
-        return $loyaltyCustomerResult->getElements()[array_key_first($loyaltyCustomerResult->getElements())];
+        return $loyaltyCustomerResult->first();
     }
 
     /**
@@ -67,7 +67,7 @@ trait PointsTrait {
         $loyaltyRedemptionResult = $entityRepository->search($criteria, $context);
 
         if ( $loyaltyRedemptionResult->getTotal() > 0 ) {
-            return $loyaltyRedemptionResult->getElements()[array_key_first($loyaltyRedemptionResult->getElements())];
+            return $loyaltyRedemptionResult->first();
         }
 
         return null;
