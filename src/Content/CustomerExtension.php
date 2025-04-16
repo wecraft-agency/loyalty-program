@@ -4,6 +4,7 @@ namespace LoyaltyProgram\Content;
 
 use LoyaltyProgram\Content\Customer\LoyaltyCustomerDefinition;
 use LoyaltyProgram\Content\Redemption\RedemptionDefinition;
+use Shopware\Core\Checkout\Promotion\PromotionDefinition;
 
 use Shopware\Core\Checkout\Customer\CustomerDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityExtension;

@@ -102,6 +102,14 @@
                                         {% else %}
                                             <form action="/loyalty-claim/discount" method="post" class="claim-widget" data-generate-discount="true">
                                                 <input type="hidden" name="redirectTo" value="frontend.account.loyalty.rewards" />
+                                                <input type="hidden" name="discountMethod" value="{{ item.discountMethod }}" />
+                                                <input type="hidden" name="discountName" value="{{ "loyaltyProgram.global.rewardsSingularTitle"|trans }} {{ item.name }}" />
+
+                                                {% if item.discountMethod === 'fixed' %}
+                                                    <input type="hidden" name="discountValue" value="{{ item.discountFixed }}" />
+                                                {% else %}
+                                                    <input type="hidden" name="discountValue" value="{{ item.discountPercentage }}" />
+                                                {% endif %}
 
                                                 <button class="btn btn-primary btn-block w-100">
                                                     {{ 'loyaltyProgram.global.claimReward'|trans|sw_sanitize }}

@@ -25,4 +25,34 @@
             } %}
         {% endif %}
     {% endblock %}
+
+    {% block page_account_loyalty_rewards_discounts %}
+        {% if promotions is defined and promotions is not empty %}
+            <div class="rewarded-promotions">
+                <div class="rewarded-promotions-header">
+                    <h3>{{ "loyaltyProgram.global.redeemedDiscounts"|trans }}</h3>
+                </div>
+                <div class="rewarded-promotions-items">
+                    {% for promotion in promotions %}
+                        <div class="rewarded-promotions-item">
+                            {{ promotion.translated.name }}
+                            <strong>{{ promotion.code }}</strong>
+
+                            {% if promotion.orderCount < promotion.maxRedemptionsGlobal %}
+                                <div class="bg-success">
+                                    VALID
+                                </div>
+                                VALID
+                            {% else %}
+                                <div class="bg-danger">
+                                    INVALID
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+        {% endif %}
+    {% endblock %}
 {% endblock %}
