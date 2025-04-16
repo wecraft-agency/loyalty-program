@@ -16,3 +16,4 @@ Points getting added by order when products have points defined.
 - Adding reward products to cart via ajax and custom controller
 - checking if basket current reward products and item to add are valid to buy with current points of customer. if not not addable
 - Reward list: showing how many points left for certain rewards
+- Create discounts by reward product, if type discount. Absolute and percentage value possible
